@@ -1,8 +1,8 @@
--- Parivar Motors Database Dump
+-- MOTOBOOK Database Dump
 -- Compatible with MySQL 5.7+ / MariaDB 10.x / XAMPP
 
-CREATE DATABASE IF NOT EXISTS `parivar_motors` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `parivar_motors`;
+CREATE DATABASE IF NOT EXISTS `motobook` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `motobook`;
 
 -- --------------------------------------------------------
 -- Table structure for `users`
@@ -24,7 +24,7 @@ CREATE TABLE `users` (
 
 -- Seed default admin user (password: admin123)
 INSERT INTO `users` (`id`, `email`, `password`, `full_name`, `status`, `role`, `created_at`, `updated_at`) VALUES
-(1, 'admin@parivarmotors.com', '$2y$10$wB5Mh7l/U.jC6oN52i1DqOxWqH55L1sP7lWjY74kFz2j4p.e6Bv4O', 'Parivar Motors Admin', 'active', 'admin', NOW(), NOW());
+(1, 'admin@motobook.com', '$2y$10$wB5Mh7l/U.jC6oN52i1DqOxWqH55L1sP7lWjY74kFz2j4p.e6Bv4O', 'MOTOBOOK Admin', 'active', 'admin', NOW(), NOW());
 
 -- --------------------------------------------------------
 -- Table structure for `remember_tokens`
@@ -63,7 +63,7 @@ CREATE TABLE `car_dealers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `car_dealers` (`name`) VALUES
-('Parivar Motors Direct'), ('Apex Motors'), ('Landmark Automobiles'), ('Shreeji Motors');
+('MOTOBOOK Direct'), ('Apex Motors'), ('Landmark Automobiles'), ('Shreeji Motors');
 
 DROP TABLE IF EXISTS `manufacturers`;
 CREATE TABLE `manufacturers` (

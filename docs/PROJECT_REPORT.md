@@ -1,4 +1,4 @@
-# Parivar Motors - Web Development Minor Project Report
+# MOTOBOOK - Web Development Minor Project Report
 
 **University**: Sir Padampat Singhania University  
 **Course**: Web Development (Minor Project)  
@@ -8,7 +8,7 @@
 **Programme**: B.Tech CSE (AI-ML)  
 **Semester**: III  
 **Submission Date**: 13 November 2026  
-**Project Title**: Parivar Motors - Automobile Dealership & Inventory Management System  
+**Project Title**: MOTOBOOK - Automobile Dealership & Inventory Management System  
 **Repository**: https://github.com/fw10ishk/parivar_motors  
 
 ---
@@ -16,12 +16,12 @@
 ## 1. Project Title and Introduction
 
 ### 1.1 Project Title
-**Parivar Motors — Comprehensive Automobile Dealership, Inventory, and Sales Management System**
+**MOTOBOOK — Comprehensive Automobile Dealership, Inventory, and Sales Management System**
 
 ### 1.2 Introduction
 In the contemporary automotive retail landscape, multi-brand automobile dealerships and pre-owned vehicle brokers deal with complex operational workflows. These workflows encompass new vehicle bookings, pre-owned vehicle evaluation and acquisition, customer inquiry pipelines, multi-stage sales financing (hire purchase, cash, and installment-based loans), RTO registration processing, insurance policies, and profit-and-loss auditing.
 
-**Parivar Motors** is a full-featured web application architected to replace fragmented manual paperwork and disparate spreadsheets with a unified, database-driven digital platform. Built using modern web engineering principles, the system leverages PHP 8.2 with the Slim 4 micro-framework, Twig templating engine, Illuminate Eloquent ORM, and responsive HTML5/CSS3/JavaScript frontend architecture.
+**MOTOBOOK** is a full-featured web application architected to replace fragmented manual paperwork and disparate spreadsheets with a unified, database-driven digital platform. Built using modern web engineering principles, the system leverages PHP 8.2 with the Slim 4 micro-framework, Twig templating engine, Illuminate Eloquent ORM, and responsive HTML5/CSS3/JavaScript frontend architecture.
 
 ---
 
@@ -224,7 +224,7 @@ The relational schema comprises **17 dedicated tables** structured with referent
 ### 7.1 Module 1: Administrative Login & Authentication
 - **Endpoint**: `GET /`
 - **Features**: Clean centered login portal with email validation, password masking, remember-me token handling, and flash alert toasts.
-- **Access Credentials**: `admin@parivarmotors.com` / `admin123`
+- **Access Credentials**: `admin@motobook.com` / `admin123`
 
 ### 7.2 Module 2: Executive Analytics Dashboard
 - **Endpoint**: `GET /dashboard`
@@ -272,7 +272,7 @@ The application underwent structured multi-tier testing:
 ## 9. Conclusion and Future Enhancements
 
 ### 9.1 Conclusion
-The **Parivar Motors** project successfully fulfills all technical requirements defined in the Web Development Minor Project Guidelines. By marrying modern PHP backend architecture with a modular component-driven frontend and relational database persistence, the system delivers an end-to-end management portal tailored to modern automobile dealership operations.
+The **MOTOBOOK** project successfully fulfills all technical requirements defined in the Web Development Minor Project Guidelines. By marrying modern PHP backend architecture with a modular component-driven frontend and relational database persistence, the system delivers an end-to-end management portal tailored to modern automobile dealership operations.
 
 ### 9.2 Future Enhancements
 1. **Automated WhatsApp & SMS Notifications**: Instant dispatch of booking confirmations, payment receipts, and delivery updates via Twilio or WhatsApp Business Cloud API.

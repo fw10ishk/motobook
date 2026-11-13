@@ -373,16 +373,16 @@ if (!$schema->hasTable('installments')) {
 }
 
 // Seed default admin user if not exists
-$adminUser = User::where('email', 'admin@parivarmotors.com')->first();
+$adminUser = User::where('email', 'admin@motobook.com')->first();
 if (!$adminUser) {
     User::create([
-        'email' => 'admin@parivarmotors.com',
+        'email' => 'admin@motobook.com',
         'password' => 'admin123',
-        'full_name' => 'Parivar Motors Admin',
+        'full_name' => 'MOTOBOOK Admin',
         'role' => 'admin',
         'status' => 'active',
     ]);
-    echo "Seeded default admin user: admin@parivarmotors.com / admin123" . PHP_EOL;
+    echo "Seeded default admin user: admin@motobook.com / admin123" . PHP_EOL;
 } else {
     echo "Admin user already exists." . PHP_EOL;
 }

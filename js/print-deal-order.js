@@ -45,7 +45,7 @@ async function printCarDetails(carId) {
                 }
 
                 @bottom-left {
-                    content: "https://parivarmotors.com";
+                    content: "https://motobook.com";
                     font-size: 10pt;
                 }
 
@@ -110,7 +110,7 @@ async function printCarDetails(carId) {
             </div>
 
             <div class="footer">
-                <p>For, Parivar Motors</p>
+                <p>For, MOTOBOOK</p>
                 <div class="signature">Tahir Mansuri</div>
             </div>
         `;

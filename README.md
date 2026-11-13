@@ -1,6 +1,5 @@
-# Parivar Motors - Automobile Dealership Management System
+# MOTOBOOK - Automobile Dealership Management System
 
-  
 > Built with **PHP 8.2**, **Slim Framework 4**, **Twig**, **Eloquent ORM**, and responsive **HTML5/CSS3/JavaScript**.
 
 ---
@@ -15,13 +14,12 @@
 - [Default Login Credentials](#default-login-credentials)
 - [Database Setup](#database-setup)
 - [Project Architecture](#project-architecture)
-- [Submission Assets](#submission-assets)
 
 ---
 
 ## Project Overview
 
-**Parivar Motors** is an automobile dealership and inventory management web application. It automates new and pre-owned vehicle acquisitions, inventory cataloging, customer inquiries, financial settlement accounting (cash, hire purchase, and installment bank loans), and administrative reporting.
+**MOTOBOOK** is an automobile dealership and inventory management web application. It automates new and pre-owned vehicle acquisitions, inventory cataloging, customer inquiries, financial settlement accounting (cash, hire purchase, and installment bank loans), and administrative reporting.
 
 ---
 
@@ -52,9 +50,7 @@
 
 ## Technical Requirements Coverage
 
-
-
-| Requirement | Implementation in Parivar Motors |
+| Requirement | Implementation in MOTOBOOK |
 |---|---|
 | **1. HTML5** | Semantic structure (`<main>`, `<aside>`, `<nav>`), responsive forms, custom data attributes |
 | **2. CSS3** | Flexbox, CSS Grid layouts, CSS variables, mobile-responsive media queries (`css/app.css`) |
@@ -79,8 +75,8 @@
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/fw10ishk/parivar_motors.git
-   cd parivar_motors
+   git clone https://github.com/fw10ishk/parivar_motors.git motobook
+   cd motobook
    ```
 
 2. **Install PHP dependencies**:
@@ -110,7 +106,7 @@
 | Field | Value |
 |---|---|
 | **Login URL** | `http://localhost:8080` |
-| **Email** | `admin@parivarmotors.com` |
+| **Email** | `admin@motobook.com` (or `admin@parivarmotors.com`) |
 | **Password** | `admin123` |
 
 ---
@@ -126,14 +122,14 @@ The repository is pre-configured to use SQLite out of the box via `app/database.
 1. Start MySQL in XAMPP.
 2. Import the provided SQL dump file located at:
    ```
-   database/parivar_motors.sql
+   database/motobook.sql
    ```
 3. Update `app/.env`:
    ```dotenv
    DB_CONNECTION=mysql
    DB_HOST=localhost
    DB_PORT=3306
-   DB_DATABASE=parivar_motors
+   DB_DATABASE=motobook
    DB_USERNAME=root
    DB_PASSWORD=
    ```
@@ -143,7 +139,7 @@ The repository is pre-configured to use SQLite out of the box via `app/database.
 ## Project Architecture
 
 ```
-parivar_motors/
+motobook/
 ├── app/
 │   ├── src/
 │   │   ├── Controllers/     # Application controllers (User, Dashboard, Cars, Sales)
@@ -160,7 +156,8 @@ parivar_motors/
 ├── css/                     # Application stylesheets (app.css)
 ├── js/                      # Frontend JavaScript (app.js, table-filters.js)
 ├── database/
-│   └── parivar_motors.sql   # Complete MySQL database export
+│   ├── motobook.sql         # Complete MySQL database export
+│   └── parivar_motors.sql   # Alternate MySQL dump
 ├── docs/
 │   ├── PROJECT_REPORT.md    # Full 10-section Academic Project Report
 │   └── Project_Report.pdf   # Formatted PDF Project Report for submission
@@ -169,8 +166,3 @@ parivar_motors/
 ├── index.php                # Application entry point
 └── README.md                # Project documentation
 ```
-
----
-
-
-
