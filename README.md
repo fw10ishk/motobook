@@ -1,6 +1,6 @@
 # Parivar Motors - Automobile Dealership Management System
 
-> **Web Development Minor Project**  
+  
 > Built with **PHP 8.2**, **Slim Framework 4**, **Twig**, **Eloquent ORM**, and responsive **HTML5/CSS3/JavaScript**.
 
 ---
@@ -52,7 +52,7 @@
 
 ## Technical Requirements Coverage
 
-This project satisfies all requirements specified in the **Minor Project Guidelines**:
+
 
 | Requirement | Implementation in Parivar Motors |
 |---|---|
@@ -172,10 +172,5 @@ parivar_motors/
 
 ---
 
-## Submission Assets
 
-Per the **Minor Project Submission Guidelines**:
-- **Complete Source Code**: Included in this repository.
-- **Database Export**: [database/parivar_motors.sql](database/parivar_motors.sql).
-- **Project Report (PDF)**: [docs/Project_Report.pdf](docs/Project_Report.pdf).
-- **GitHub Repository**: [https://github.com/fw10ishk/parivar_motors](https://github.com/fw10ishk/parivar_motors).
+

@@ -999,3 +999,4 @@ with open("docs/report_template.html", "w", encoding="utf-8") as f:
     f.write(html_content)
 
 print("HTML report template written successfully!")
+
