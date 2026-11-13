@@ -7,7 +7,7 @@
 ## Table of Contents
 - [Project Overview](#project-overview)
 - [Key Features](#key-features)
-- [Technical Requirements Coverage](#technical-requirements-coverage)
+- [Technical Capabilities](#technical-capabilities)
 - [Quick Start Guide](#quick-start-guide)
   - [Prerequisites](#prerequisites)
   - [Installation & Running](#installation--running)
@@ -48,9 +48,9 @@
 
 ---
 
-## Technical Requirements Coverage
+## Technical Capabilities
 
-| Requirement | Implementation in MOTOBOOK |
+| Capability | Implementation in MOTOBOOK |
 |---|---|
 | **1. HTML5** | Semantic structure (`<main>`, `<aside>`, `<nav>`), responsive forms, custom data attributes |
 | **2. CSS3** | Flexbox, CSS Grid layouts, CSS variables, mobile-responsive media queries (`css/app.css`) |
@@ -60,7 +60,7 @@
 | **6. Database** | MySQL and SQLite supported via Eloquent ORM with full CRUD operations |
 | **7. Authentication** | Bcrypt password hashing, session isolation, remember-me token handling |
 | **8. Version Control** | Git and GitHub repository |
-| **9. Testing & Debugging** | Multi-tier test suite (Unit, Integration, Route, and Security checks) |
+| **9. Testing & Quality** | Multi-tier test verification (Unit, Integration, Route, and Security checks) |
 | **10. Deployment** | Ready for deployment on local development servers, XAMPP, or cloud hosting |
 
 ---
@@ -75,7 +75,7 @@
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/fw10ishk/parivar_motors.git motobook
+   git clone https://github.com/fw10ishk/motobook.git
    cd motobook
    ```
 
@@ -106,7 +106,7 @@
 | Field | Value |
 |---|---|
 | **Login URL** | `http://localhost:8080` |
-| **Email** | `admin@motobook.com` (or `admin@parivarmotors.com`) |
+| **Email** | `admin@motobook.com` |
 | **Password** | `admin123` |
 
 ---
@@ -156,8 +156,7 @@ motobook/
 ├── css/                     # Application stylesheets (app.css)
 ├── js/                      # Frontend JavaScript (app.js, table-filters.js)
 ├── database/
-│   ├── motobook.sql         # Complete MySQL database export
-│   └── parivar_motors.sql   # Alternate MySQL dump
+│   └── motobook.sql         # Complete MySQL database export
 ├── docs/
 │   ├── PROJECT_REPORT.md    # Full 10-section Academic Project Report
 │   └── Project_Report.pdf   # Formatted PDF Project Report for submission

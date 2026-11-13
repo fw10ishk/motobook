@@ -1,7 +1,7 @@
-# MOTOBOOK - Web Development Minor Project Report
+# MOTOBOOK - Web Development Project Report
 
 **University**: Sir Padampat Singhania University  
-**Course**: Web Development (Minor Project)  
+**Course**: Web Development   
 **Academic Year**: 2026-2027  
 **Student Name**: Tanishk Jain  
 **Enrollment Number**: 25CS003751  
@@ -9,7 +9,7 @@
 **Semester**: III  
 **Submission Date**: 13 November 2026  
 **Project Title**: MOTOBOOK - Automobile Dealership & Inventory Management System  
-**Repository**: https://github.com/fw10ishk/parivar_motors  
+**Repository**: https://github.com/fw10ishk/motobook  
 
 ---
 
@@ -272,7 +272,7 @@ The application underwent structured multi-tier testing:
 ## 9. Conclusion and Future Enhancements
 
 ### 9.1 Conclusion
-The **MOTOBOOK** project successfully fulfills all technical requirements defined in the Web Development Minor Project Guidelines. By marrying modern PHP backend architecture with a modular component-driven frontend and relational database persistence, the system delivers an end-to-end management portal tailored to modern automobile dealership operations.
+The **MOTOBOOK** project successfully fulfills all technical requirements defined in the Web Development Course Guidelines. By marrying modern PHP backend architecture with a modular component-driven frontend and relational database persistence, the system delivers an end-to-end management portal tailored to modern automobile dealership operations.
 
 ### 9.2 Future Enhancements
 1. **Automated WhatsApp & SMS Notifications**: Instant dispatch of booking confirmations, payment receipts, and delivery updates via Twilio or WhatsApp Business Cloud API.
