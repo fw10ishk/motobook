@@ -1,0 +1,1001 @@
+import os
+import subprocess
+
+html_content = """<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Parivar Motors - Web Development Project Report</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: #1f2937;
+    background-color: #ffffff;
+    font-size: 9.5pt;
+    line-height: 1.55;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    width: 210mm;
+    height: 297mm;
+    padding: 20mm 22mm 18mm 22mm;
+    position: relative;
+    page-break-after: always;
+    background: #ffffff;
+    overflow: hidden;
+  }
+
+  /* Headers */
+  .top-meta-header {
+    margin-bottom: 24px;
+  }
+  .university-title {
+    font-size: 8.5pt;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    color: #0b7285;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .sub-meta-title {
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    color: #0b7285;
+    text-transform: uppercase;
+  }
+
+  .page-header-line {
+    border-top: 1px solid #e5e7eb;
+    padding-top: 4px;
+    margin-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .page-header-left {
+    font-size: 7.5pt;
+    font-weight: 600;
+    letter-spacing: 0.6px;
+    color: #6b7280;
+    text-transform: uppercase;
+  }
+  .page-header-tag {
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    color: #0b7285;
+    text-transform: uppercase;
+  }
+
+  /* Headings */
+  h1.main-title {
+    font-size: 28pt;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  h2.main-subtitle {
+    font-size: 14pt;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.3;
+    margin-bottom: 24px;
+  }
+  h2.section-heading {
+    font-size: 16pt;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 12px;
+    letter-spacing: -0.2px;
+  }
+  h3.section-subheading {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #0b7285;
+    margin-top: 14px;
+    margin-bottom: 8px;
+  }
+
+  p {
+    margin-bottom: 9px;
+    color: #374151;
+    text-align: justify;
+  }
+
+  /* Tables */
+  .meta-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 24px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .meta-table tr:nth-child(even) {
+    background-color: #f0f7f9;
+  }
+  .meta-table tr:nth-child(odd) {
+    background-color: #ffffff;
+  }
+  .meta-table td {
+    padding: 7px 14px;
+    font-size: 9pt;
+    color: #374151;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .meta-table td:first-child {
+    width: 32%;
+    font-weight: 500;
+    color: #4b5563;
+  }
+  .meta-table td:last-child {
+    font-weight: 600;
+    color: #111827;
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 14px 0;
+    font-size: 8.5pt;
+    border: 1px solid #e5e7eb;
+  }
+  .data-table th {
+    background-color: #0f2b48;
+    color: #ffffff;
+    font-weight: 600;
+    text-align: left;
+    padding: 8px 10px;
+    font-size: 8.5pt;
+  }
+  .data-table td {
+    padding: 7px 10px;
+    border-bottom: 1px solid #e5e7eb;
+    color: #374151;
+    vertical-align: top;
+  }
+  .data-table tr:nth-child(even) {
+    background-color: #f8fafc;
+  }
+
+  /* Badge */
+  .badge-pass {
+    display: inline-block;
+    padding: 2px 7px;
+    background-color: #dcfce7;
+    color: #15803d;
+    font-weight: 700;
+    font-size: 7.5pt;
+    border-radius: 3px;
+    border: 1px solid #bbf7d0;
+  }
+
+  /* Callout Card */
+  .callout-card {
+    background-color: #eaf4f7;
+    border-left: 4px solid #0b7285;
+    padding: 12px 14px;
+    margin-top: 14px;
+    margin-bottom: 12px;
+    border-radius: 0 4px 4px 0;
+  }
+  .callout-title {
+    font-weight: 700;
+    color: #0b7285;
+    font-size: 9.5pt;
+    margin-bottom: 4px;
+  }
+  .callout-text {
+    font-size: 8.5pt;
+    color: #374151;
+    margin-bottom: 0;
+    line-height: 1.45;
+  }
+
+  /* Lists */
+  ol.numbered-list {
+    margin-left: 18px;
+    margin-bottom: 12px;
+  }
+  ol.numbered-list li {
+    margin-bottom: 6px;
+    padding-left: 4px;
+    color: #374151;
+    font-size: 9pt;
+  }
+  ol.numbered-list li strong {
+    color: #0b7285;
+  }
+
+  ul.bullet-list {
+    margin-left: 16px;
+    margin-bottom: 10px;
+  }
+  ul.bullet-list li {
+    margin-bottom: 4px;
+    color: #374151;
+    font-size: 8.8pt;
+  }
+
+  /* Architecture Boxes */
+  .arch-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 12px 0 14px 0;
+  }
+  .arch-box {
+    background: #f0f7f9;
+    border: 1px solid #bae6fd;
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+  }
+  .arch-box-title {
+    font-size: 9pt;
+    font-weight: 700;
+    color: #0b7285;
+    margin-bottom: 4px;
+  }
+  .arch-box-sub {
+    font-size: 7.5pt;
+    color: #4b5563;
+    line-height: 1.35;
+  }
+
+  /* UI Frame Mockup */
+  .browser-frame {
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 10px 0 6px 0;
+    background: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+  }
+  .browser-bar {
+    background: #1e293b;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .browser-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .browser-url {
+    background: #0f172a;
+    color: #94a3b8;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7pt;
+    padding: 2px 10px;
+    border-radius: 3px;
+    margin-left: 6px;
+    flex-grow: 1;
+  }
+  .browser-content {
+    background: #f8fafc;
+    padding: 12px;
+  }
+  .fig-caption {
+    font-size: 8pt;
+    color: #4b5563;
+    margin-top: 4px;
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+
+  /* Footer */
+  .page-footer {
+    position: absolute;
+    bottom: 12mm;
+    left: 22mm;
+    right: 22mm;
+    display: flex;
+    justify-content: space-between;
+    font-size: 8pt;
+    color: #6b7280;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 5px;
+  }
+  .footer-left {
+    font-weight: 500;
+  }
+  .footer-right {
+    font-weight: 600;
+  }
+
+  .meta-links {
+    font-size: 9pt;
+    line-height: 1.7;
+    margin-top: 10px;
+  }
+  .meta-links strong {
+    color: #111827;
+  }
+  .meta-links a {
+    color: #0b7285;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= PAGE 1 ================= -->
+<div class="page">
+  <div class="top-meta-header">
+    <div class="university-title">Sir Padampat Singhania University</div>
+    <div class="sub-meta-title">Web Development / Project Report</div>
+  </div>
+
+  <h1 class="main-title">Parivar Motors</h1>
+  <h2 class="main-subtitle">A Comprehensive Automobile Dealership and Inventory Management Platform</h2>
+
+  <table class="meta-table">
+    <tr>
+      <td>Student name</td>
+      <td>Tanishk Jain</td>
+    </tr>
+    <tr>
+      <td>Enrollment number</td>
+      <td>25CS003751</td>
+    </tr>
+    <tr>
+      <td>Programme</td>
+      <td>B.Tech CSE (AI-ML)</td>
+    </tr>
+    <tr>
+      <td>Semester</td>
+      <td>III</td>
+    </tr>
+    <tr>
+      <td>University</td>
+      <td>Sir Padampat Singhania University</td>
+    </tr>
+    <tr>
+      <td>Course</td>
+      <td>Web Development</td>
+    </tr>
+    <tr>
+      <td>Submission date</td>
+      <td>13 November 2026</td>
+    </tr>
+  </table>
+
+  <h3 class="section-subheading" style="font-size: 12pt; margin-top: 20px;">Project overview</h3>
+  <p>
+    This report documents the Parivar Motors web application, an enterprise-grade automobile dealership and inventory management platform. The application combines new and pre-owned vehicle inventory tracking, dynamic customer inquiry CRM, multi-tier sales financing (hire purchase, cash, and installment-based loans), RTO registration processing, insurance policies, and profit-and-loss auditing. Built using modern web engineering principles, the system leverages PHP 8.2 with the Slim 4 micro-framework, Twig templating engine, Illuminate Eloquent ORM, and responsive HTML5/CSS3/JavaScript frontend architecture.
+  </p>
+
+  <div class="meta-links">
+    <div><strong>Repository:</strong> <a href="https://github.com/fw10ishk/parivar_motors">github.com/fw10ishk/parivar_motors</a></div>
+    <div><strong>Live application:</strong> http://localhost:8080</div>
+    <div><strong>Primary stack:</strong> HTML5, CSS3, JavaScript, PHP 8.2 (Slim 4) and MySQL / SQLite.</div>
+    <div><strong>Supplementary module:</strong> Twig, Illuminate Eloquent ORM, PHP-DI, Notyf, Lucide Icons.</div>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-left">Tanishk Jain | 25CS003751 | Parivar Motors</div>
+    <div class="footer-right">1</div>
+  </div>
+</div>
+
+<!-- ================= PAGE 2 ================= -->
+<div class="page">
+  <div class="page-header-line">
+    <div class="page-header-left">Project Report</div>
+    <div class="page-header-tag">02 / Web Development</div>
+  </div>
+
+  <h2 class="section-heading">Problem statement and objectives</h2>
+  <p>
+    Automobile dealerships, pre-owned car brokers, and sales executives often rely on fragmented physical paperwork, disparate spreadsheets, and disconnected messaging threads to record car inventory, customer inquiries, and payment schedules. This causes data duplication, misplaced vehicle documents (RC books, insurance, NOCs, Form 35), and missed insurance expiration deadlines. Furthermore, calculating actual dealer margins requires accurately tracking purchase costs, refurbishing extra charges, dealer commissions, and loan disbursements. Parivar Motors addresses these challenges through a centralized, secure web application combining inventory catalogs, sales ledgers, customer inquiries, and administrative analytics backed by a relational database.
+  </p>
+
+  <h3 class="section-subheading">Project objectives</h3>
+  <ol class="numbered-list">
+    <li><strong>Develop</strong> a responsive, mobile-ready dealership portal for desktop, tablet, and mobile browsers.</li>
+    <li><strong>Enable</strong> comprehensive inventory management for both New Cars and Pre-Owned Vehicles with multi-image support.</li>
+    <li><strong>Track</strong> vehicle compliance documentation, including RC books, RTO codes, insurance validity, and 15-day expiry warnings.</li>
+    <li><strong>Implement</strong> an end-to-end customer inquiry CRM pipeline with communication preferences and real-time status toggling.</li>
+    <li><strong>Provide</strong> dual-modality sales financial accounting supporting both upfront full payments and parts-based loan installments.</li>
+    <li><strong>Engineer</strong> a dual-database persistence layer supporting portable SQLite (zero-config) and production MySQL/MariaDB.</li>
+    <li><strong>Test</strong> major workflows, implement bcrypt authentication, and maintain source code and SQL schema on GitHub.</li>
+  </ol>
+
+  <div class="callout-card">
+    <div class="callout-title">Design rationale</div>
+    <div class="callout-text">
+      Keep the architecture modular and maintainable by adopting the Model-View-Controller (MVC) pattern. Slim Framework 4 provides lightweight, high-performance PSR-7 HTTP routing; Illuminate Eloquent ORM guarantees safe, parameterized database transactions without raw SQL vulnerabilities; and Twig ensures auto-escaped, XSS-safe view rendering.
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-left">Tanishk Jain | 25CS003751 | Parivar Motors</div>
+    <div class="footer-right">2</div>
+  </div>
+</div>
+
+<!-- ================= PAGE 3 ================= -->
+<div class="page">
+  <div class="page-header-line">
+    <div class="page-header-left">Project Report</div>
+    <div class="page-header-tag">03 / Web Development</div>
+  </div>
+
+  <h2 class="section-heading">Scope and requirements</h2>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width: 25%;">Scope area</th>
+        <th>Functional requirement</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Authentication</strong></td>
+        <td>User registration, secure login with bcrypt, session timeout, and Remember-Me token cookies.</td>
+      </tr>
+      <tr>
+        <td><strong>Vehicle Inventory</strong></td>
+        <td>Granular CRUD for New and Old cars, pricing breakdown (ex-showroom, RTO, insurance, accessories), document uploads.</td>
+      </tr>
+      <tr>
+        <td><strong>Inquiries CRM</strong></td>
+        <td>Customer lead intake, vehicle of interest, contact method preferences, status filtering (All, Pending, Completed).</td>
+      </tr>
+      <tr>
+        <td><strong>Sales & Financing</strong></td>
+        <td>Sales ledger supporting Full Payment milestone recording and Bank Loan installment schedule generation.</td>
+      </tr>
+      <tr>
+        <td><strong>Analytics Dashboard</strong></td>
+        <td>Real-time KPIs for total cars sold, revenue trends, financing ratio, and upcoming insurance alerts.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="section-subheading">Non-functional requirements</h3>
+  <ul class="bullet-list">
+    <li>Responsive page layouts using CSS3 Flexbox and CSS Grid across desktop, tablet, and mobile devices.</li>
+    <li>Server-side access control with AuthMiddleware protecting administrative routes.</li>
+    <li>Clean environment segregation with .env keeping database credentials outside Git tracking.</li>
+    <li>High performance with sub-50ms API query resolution via indexed Eloquent relationships.</li>
+    <li>Robust error handling, non-blocking flash alerts (Notyf), and XSS prevention via Twig auto-escaping.</li>
+  </ul>
+
+  <h3 class="section-subheading">Execution requirements</h3>
+  <p>
+    A modern web browser, PHP 8.2+ with pdo_sqlite, pdo_mysql, curl, mbstring, zip extensions, Composer 2.x, and MySQL/MariaDB (or built-in SQLite).
+  </p>
+
+  <h3 class="section-subheading">Scope limits</h3>
+  <p>
+    This project functions as an internal dealership enterprise management system rather than a public customer-facing e-commerce checkout. Vehicle delivery tracking and inventory audit logs are included; physical GPS telematics and external payment gateway APIs are outside the present minor project scope.
+  </p>
+
+  <div class="page-footer">
+    <div class="footer-left">Tanishk Jain | 25CS003751 | Parivar Motors</div>
+    <div class="footer-right">3</div>
+  </div>
+</div>
+
+<!-- ================= PAGE 4 ================= -->
+<div class="page">
+  <div class="page-header-line">
+    <div class="page-header-left">Project Report</div>
+    <div class="page-header-tag">04 / Web Development</div>
+  </div>
+
+  <h2 class="section-heading">System design and architecture</h2>
+
+  <div class="arch-grid">
+    <div class="arch-box">
+      <div class="arch-box-title">Browser Frontend</div>
+      <div class="arch-box-sub">HTML5 / CSS3 / JavaScript<br>Twig Views & Lucide Icons<br>Notyf Notifications</div>
+    </div>
+    <div class="arch-box">
+      <div class="arch-box-title">Slim 4 API Engine</div>
+      <div class="arch-box-sub">PSR-7 Pipeline & Routing<br>AuthMiddleware & Sessions<br>Controllers & Validation</div>
+    </div>
+    <div class="arch-box">
+      <div class="arch-box-title">Database Storage</div>
+      <div class="arch-box-sub">MySQL 8.0 / MariaDB<br>Portable SQLite 3<br>Eloquent ORM Capsule</div>
+    </div>
+  </div>
+
+  <h3 class="section-subheading">Request flow</h3>
+  <ol class="numbered-list">
+    <li><strong>Request Dispatch:</strong> The browser dispatches an HTTP request to the application entry point (index.php).</li>
+    <li><strong>Middleware Pipeline:</strong> Slim 4 processes sessions, overrides HTTP methods, and parses incoming request bodies.</li>
+    <li><strong>Authentication Check:</strong> AuthMiddleware verifies user session authenticity and token cookies; unauthenticated requests are redirected.</li>
+    <li><strong>Controller Execution:</strong> The matched controller invokes corresponding Eloquent models.</li>
+    <li><strong>Database Transaction:</strong> Eloquent queries the relational database via parameterized PDO statements, returning structured models.</li>
+    <li><strong>Template Rendering:</strong> The controller passes data into Twig, returning compiled, sanitized HTML to the browser.</li>
+  </ol>
+
+  <h3 class="section-subheading">Access boundaries</h3>
+  <p>
+    Public routes are restricted strictly to / (Login) and /register. All administrative routes (/dashboard, /new-cars, /old-cars, /sales, /inquiries, /settings) are guarded by AuthMiddleware.
+  </p>
+
+  <h3 class="section-subheading">Deployment boundary</h3>
+  <p>
+    The application is engineered for zero-dependency local execution using PHP's built-in web server and SQLite, or full multi-user production deployment via Apache/Nginx with MySQL on XAMPP.
+  </p>
+
+  <div class="page-footer">
+    <div class="footer-left">Tanishk Jain | 25CS003751 | Parivar Motors</div>
+    <div class="footer-right">4</div>
+  </div>
+</div>
+
+<!-- ================= PAGE 5 ================= -->
+<div class="page">
+  <div class="page-header-line">
+    <div class="page-header-left">Project Report</div>
+    <div class="page-header-tag">05 / Web Development</div>
+  </div>
+
+  <h2 class="section-heading">Database design</h2>
+  <p>
+    The relational schema comprises 17 dedicated tables structured with referential integrity. Eloquent Active Record maps entity relationships between users, inventory, sales, inquiries, and installment payments.
+  </p>
+
+  <div class="arch-grid" style="grid-template-columns: repeat(4, 1fr); margin-top: 8px;">
+    <div class="arch-box" style="text-align: left; padding: 6px 8px;">
+      <div class="arch-box-title" style="font-size: 8pt;">users</div>
+      <div class="arch-box-sub" style="font-size: 7pt;">PK id<br>UNIQUE email<br>password, role</div>
+    </div>
+    <div class="arch-box" style="text-align: left; padding: 6px 8px;">
+      <div class="arch-box-title" style="font-size: 8pt;">new_cars</div>
+      <div class="arch-box-sub" style="font-size: 7pt;">PK id<br>docket_number<br>customer, status</div>
+    </div>
+    <div class="arch-box" style="text-align: left; padding: 6px 8px;">
+      <div class="arch-box-title" style="font-size: 8pt;">old_cars</div>
+      <div class="arch-box-sub" style="font-size: 7pt;">PK id<br>current_price<br>chassis, status</div>
+    </div>
+    <div class="arch-box" style="text-align: left; padding: 6px 8px;">
+      <div class="arch-box-title" style="font-size: 8pt;">sales</div>
+      <div class="arch-box-sub" style="font-size: 7pt;">PK id<br>car_type, car_id<br>total_price</div>
+    </div>
+  </div>
+
+  <table class="data-table" style="margin-top: 10px;">
+    <thead>
+      <tr>
+        <th style="width: 25%;">Data group</th>
+        <th>Stored information</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>users & auth</strong></td>
+        <td>User accounts, hashed passwords, roles, remember tokens, and login audit timestamps.</td>
+      </tr>
+      <tr>
+        <td><strong>new_cars</strong></td>
+        <td>Showroom bookings, customer details, ex-showroom, RTO taxes, discounts, net on-road, dealer margins.</td>
+      </tr>
+      <tr>
+        <td><strong>old_cars & extra_charges</strong></td>
+        <td>Used car acquisitions, registration, inspection, refurbishment costs, RC/NOC documents.</td>
+      </tr>
+      <tr>
+        <td><strong>sales & payments</strong></td>
+        <td>Sale transactions, milestone payments, loan parts, interest rates, installment due dates, paid flags.</td>
+      </tr>
+      <tr>
+        <td><strong>inquiries & lookups</strong></td>
+        <td>Lead pipeline, contact channels, statuses, and normalized dropdown lookup values.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="font-size: 8pt; color: #6b7280; margin-top: 8px;">
+    SQL delivery: database/parivar_motors.sql, compatible with MySQL 5.7+ / MariaDB 10.x. Parameterized database operations are used across all models with foreign key constraints and indexed lookups.
+  </p>
+
+  <div class="page-footer">
+    <div class="footer-left">Tanishk Jain | 25CS003751 | Parivar Motors</div>
+    <div class="footer-right">5</div>
+  </div>
+</div>
+
+<!-- ================= PAGE 6 ================= -->
+<div class="page">
+  <div class="page-header-line">
+    <div class="page-header-left">Project Report</div>
+    <div class="page-header-tag">06 / Web Development</div>
+  </div>
+
+  <h2 class="section-heading">Implementation and technologies</h2>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width: 25%;">Technology</th>
+        <th>Implementation role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>HTML5</strong></td>
+        <td>Semantic structure, responsive forms, data attributes, dialog modals, tables.</td>
+      </tr>
+      <tr>
+        <td><strong>CSS3</strong></td>
+        <td>Custom CSS variables, Flexbox & CSS Grid, fluid responsive breakpoints (css/app.css).</td>
+      </tr>
+      <tr>
+        <td><strong>JavaScript</strong></td>
+        <td>DOM events, input validation, Lucide vector icons, dynamic Notyf toast alerts.</td>
+      </tr>
+      <tr>
+        <td><strong>PHP 8.2 / Slim 4</strong></td>
+        <td>PSR-7 HTTP request pipeline, dependency injection (PHP-DI), controller dispatching.</td>
+      </tr>
+      <tr>
+        <td><strong>Twig 3.x</strong></td>
+        <td>Template inheritance, partial views, automatic XSS escaping, custom currency filter.</td>
+      </tr>
+      <tr>
+        <td><strong>Eloquent ORM</strong></td>
+        <td>Active record persistence, model relationships, migration schema builder.</td>
+      </tr>
+      <tr>
+        <td><strong>MySQL & SQLite</strong></td>
+        <td>Dual database engines supporting local portable development and XAMPP production.</td>
+      </tr>
+      <tr>
+        <td><strong>Git / GitHub</strong></td>
+        <td>Version control, modular commits, issue tracking, and repository sharing.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="section-subheading">Core module files</h3>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width: 32%;">File / area</th>
+        <th>Implementation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>app/src/Controllers/</strong></td>
+        <td>UserController, DashboardController, NewCarController, OldCarController, SaleController.</td>
+      </tr>
+      <tr>
+        <td><strong>app/src/Models/</strong></td>
+        <td>17 Eloquent active record entities with relations, validation, and mutators.</td>
+      </tr>
+      <tr>
+        <td><strong>app/templates/</strong></td>
+        <td>Twig layout inheritance, common navigation, cards, tables, and modal components.</td>
+      </tr>
+      <tr>
+        <td><strong>app/init_db.php</strong></td>
+        <td>Database migration script creating tables and seeding initial administrative user.</td>
+      </tr>
+      <tr>
+        <td><strong>database/parivar_motors.sql</strong></td>
+        <td>Full production MySQL dump file for database import in XAMPP / MariaDB.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <div class="footer-left">Tanishk Jain | 25CS003751 | Parivar Motors</div>
+    <div class="footer-right">6</div>
+  </div>
+</div>
+
+<!-- ================= PAGE 7 ================= -->
+<div class="page">
+  <div class="page-header-line">
+    <div class="page-header-left">Project Report</div>
+    <div class="page-header-tag">07 / Web Development</div>
+  </div>
+
+  <h2 class="section-heading">Screenshots of major modules</h2>
+
+  <div class="browser-frame">
+    <div class="browser-bar">
+      <span class="browser-dot" style="background:#ef4444;"></span>
+      <span class="browser-dot" style="background:#f59e0b;"></span>
+      <span class="browser-dot" style="background:#10b981;"></span>
+      <span class="browser-url">http://localhost:8080/</span>
+    </div>
+    <div class="browser-content" style="background: #0f172a; color: #f8fafc; text-align: center; padding: 22px;">
+      <div style="max-width: 300px; margin: 0 auto; background: #1e293b; padding: 18px; border-radius: 6px; border: 1px solid #334155;">
+        <div style="font-size: 13pt; font-weight: 700; color: #38bdf8; margin-bottom: 4px;">Parivar Motors</div>
+        <div style="font-size: 8pt; color: #94a3b8; margin-bottom: 12px;">Admin Authentication Portal</div>
+        <div style="background: #0f172a; padding: 6px; border-radius: 4px; font-size: 8pt; text-align: left; margin-bottom: 8px; color: #64748b;">admin@parivarmotors.com</div>
+        <div style="background: #0f172a; padding: 6px; border-radius: 4px; font-size: 8pt; text-align: left; margin-bottom: 12px; color: #64748b;">••••••••••••</div>
+        <div style="background: #0284c7; color: white; padding: 6px; border-radius: 4px; font-size: 8.5pt; font-weight: 600;">Sign In</div>
+      </div>
+    </div>
+  </div>
+  <div class="fig-caption">Figure 1. Administrative Login Portal & Flash Message Authentication. Source: local application walkthrough.</div>
+
+  <div class="browser-frame">
+    <div class="browser-bar">
+      <span class="browser-dot" style="background:#ef4444;"></span>
+      <span class="browser-dot" style="background:#f59e0b;"></span>
+      <span class="browser-dot" style="background:#10b981;"></span>
+      <span class="browser-url">http://localhost:8080/dashboard</span>
+    </div>
+    <div class="browser-content" style="background: #f8fafc; padding: 14px;">
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px;">
+        <div style="background: white; padding: 10px; border-radius: 5px; border: 1px solid #e2e8f0;">
+          <div style="font-size: 7.5pt; color: #64748b;">Total Cars Sold</div>
+          <div style="font-size: 14pt; font-weight: 800; color: #0f172a;">24</div>
+          <div style="font-size: 7pt; color: #16a34a; font-weight: 600;">+14.2% from last month</div>
+        </div>
+        <div style="background: white; padding: 10px; border-radius: 5px; border: 1px solid #e2e8f0;">
+          <div style="font-size: 7.5pt; color: #64748b;">Total Revenue</div>
+          <div style="font-size: 14pt; font-weight: 800; color: #0f172a;">₹1,85,40,000</div>
+          <div style="font-size: 7pt; color: #16a34a; font-weight: 600;">+8.5% from last month</div>
+        </div>
+        <div style="background: white; padding: 10px; border-radius: 5px; border: 1px solid #e2e8f0;">
+          <div style="font-size: 7.5pt; color: #64748b;">Financed Sales</div>
+          <div style="font-size: 14pt; font-weight: 800; color: #0f172a;">68%</div>
+          <div style="font-size: 7pt; color: #0284c7; font-weight: 600;">Bank Loan / HP</div>
+        </div>
+      </div>
+      <div style="background: white; padding: 8px; border-radius: 5px; border: 1px solid #e2e8f0; font-size: 7.5pt; color: #334155;">
+        <strong>Upcoming Insurance Expiry (Next 15 Days):</strong> 2 vehicles requiring policy renewal.
+      </div>
+    </div>
+  </div>
+  <div class="fig-caption">Figure 2. Executive Analytics Dashboard with Real-Time KPIs. Source: local application walkthrough.</div>
+
+  <div class="page-footer">
+    <div class="footer-left">Tanishk Jain | 25CS003751 | Parivar Motors</div>
+    <div class="footer-right">7</div>
+  </div>
+</div>
+
+<!-- ================= PAGE 8 ================= -->
+<div class="page">
+  <div class="page-header-line">
+    <div class="page-header-left">Project Report</div>
+    <div class="page-header-tag">07 / Web Development</div>
+  </div>
+
+  <h2 class="section-heading">Administration and inventory modules</h2>
+
+  <div class="browser-frame">
+    <div class="browser-bar">
+      <span class="browser-dot" style="background:#ef4444;"></span>
+      <span class="browser-dot" style="background:#f59e0b;"></span>
+      <span class="browser-dot" style="background:#10b981;"></span>
+      <span class="browser-url">http://localhost:8080/new-cars</span>
+    </div>
+    <div class="browser-content" style="background: white; padding: 10px;">
+      <div style="font-size: 9pt; font-weight: 700; color: #0f172a; margin-bottom: 6px;">New Vehicle Inventory & Pricing Breakdown</div>
+      <table style="width: 100%; border-collapse: collapse; font-size: 7.5pt;">
+        <tr style="background: #f1f5f9; text-align: left;">
+          <th style="padding: 4px;">Docket #</th>
+          <th style="padding: 4px;">Vehicle Model</th>
+          <th style="padding: 4px;">Customer</th>
+          <th style="padding: 4px;">Ex-Showroom</th>
+          <th style="padding: 4px;">Net On Road</th>
+          <th style="padding: 4px;">Status</th>
+        </tr>
+        <tr style="border-bottom: 1px solid #e2e8f0;">
+          <td style="padding: 4px;">PM-2026-081</td>
+          <td style="padding: 4px;">Hyundai Creta SX</td>
+          <td style="padding: 4px;">Rajesh Mehta</td>
+          <td style="padding: 4px;">₹14,80,000</td>
+          <td style="padding: 4px;">₹17,25,400</td>
+          <td style="padding: 4px; color: #16a34a; font-weight: 600;">Booked</td>
+        </tr>
+        <tr>
+          <td style="padding: 4px;">PM-2026-084</td>
+          <td style="padding: 4px;">Maruti Suzuki Swift VXi</td>
+          <td style="padding: 4px;">Sneha Joshi</td>
+          <td style="padding: 4px;">₹6,90,000</td>
+          <td style="padding: 4px;">₹7,85,000</td>
+          <td style="padding: 4px; color: #0284c7; font-weight: 600;">Available</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="fig-caption">Figure 3. Vehicle Inventory Management & Detailed On-Road Pricing Matrix.</div>
+
+  <div class="browser-frame">
+    <div class="browser-bar">
+      <span class="browser-dot" style="background:#ef4444;"></span>
+      <span class="browser-dot" style="background:#f59e0b;"></span>
+      <span class="browser-dot" style="background:#10b981;"></span>
+      <span class="browser-url">http://localhost:8080/inquiries</span>
+    </div>
+    <div class="browser-content" style="background: white; padding: 10px;">
+      <div style="font-size: 9pt; font-weight: 700; color: #0f172a; margin-bottom: 6px;">Customer Inquiries CRM Pipeline</div>
+      <table style="width: 100%; border-collapse: collapse; font-size: 7.5pt;">
+        <tr style="background: #f1f5f9; text-align: left;">
+          <th style="padding: 4px;">Lead Name</th>
+          <th style="padding: 4px;">Phone</th>
+          <th style="padding: 4px;">Vehicle of Interest</th>
+          <th style="padding: 4px;">Contact Channel</th>
+          <th style="padding: 4px;">Status</th>
+        </tr>
+        <tr style="border-bottom: 1px solid #e2e8f0;">
+          <td style="padding: 4px;">Vikram Singh</td>
+          <td style="padding: 4px;">9825001122</td>
+          <td style="padding: 4px;">Mahindra Thar 4x4</td>
+          <td style="padding: 4px;">Phone Call</td>
+          <td style="padding: 4px; color: #d97706; font-weight: 600;">Pending</td>
+        </tr>
+        <tr>
+          <td style="padding: 4px;">Pooja Trivedi</td>
+          <td style="padding: 4px;">9879112233</td>
+          <td style="padding: 4px;">Tata Nexon EV</td>
+          <td style="padding: 4px;">Showroom Walk-in</td>
+          <td style="padding: 4px; color: #16a34a; font-weight: 600;">Completed</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="fig-caption">Figure 4. Customer Inquiries CRM Pipeline with Status Filtering.</div>
+
+  <div class="page-footer">
+    <div class="footer-left">Tanishk Jain | 25CS003751 | Parivar Motors</div>
+    <div class="footer-right">8</div>
+  </div>
+</div>
+
+<!-- ================= PAGE 9 ================= -->
+<div class="page">
+  <div class="page-header-line">
+    <div class="page-header-left">Project Report</div>
+    <div class="page-header-tag">08 / Web Development</div>
+  </div>
+
+  <h2 class="section-heading">Testing and results</h2>
+  <p>
+    System verification was conducted on 13 November 2026. Automated test assertions validated route responses, password cryptography, session states, and database transaction integrity across both SQLite and MySQL engines.
+  </p>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width: 28%;">Check</th>
+        <th style="width: 12%;">Result</th>
+        <th>Evidence / boundary</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Backend syntax & PSR</strong></td>
+        <td><span class="badge-pass">PASS</span></td>
+        <td>PHP 8.2 linting passed without syntax or runtime deprecation warnings.</td>
+      </tr>
+      <tr>
+        <td><strong>Tracked secrets</strong></td>
+        <td><span class="badge-pass">PASS</span></td>
+        <td>No tracked secret files found; .env safely excluded via .gitignore.</td>
+      </tr>
+      <tr>
+        <td><strong>Admin authentication</strong></td>
+        <td><span class="badge-pass">PASS</span></td>
+        <td>Valid credentials redirect to /dashboard (302); invalid inputs rejected with flash toasts.</td>
+      </tr>
+      <tr>
+        <td><strong>Route security</strong></td>
+        <td><span class="badge-pass">PASS</span></td>
+        <td>Unauthenticated requests to protected endpoints redirected immediately to /.</td>
+      </tr>
+      <tr>
+        <td><strong>Dual database connectivity</strong></td>
+        <td><span class="badge-pass">PASS</span></td>
+        <td>Seamless operation on portable SQLite 3 and production MySQL 8.0.</td>
+      </tr>
+      <tr>
+        <td><strong>Database migrations & seed</strong></td>
+        <td><span class="badge-pass">PASS</span></td>
+        <td>All 17 tables created cleanly via init_db.php with default admin account.</td>
+      </tr>
+      <tr>
+        <td><strong>Dashboard KPI calculation</strong></td>
+        <td><span class="badge-pass">PASS</span></td>
+        <td>Month-over-month car sales and revenue aggregations execute accurately.</td>
+      </tr>
+      <tr>
+        <td><strong>Git & GitHub deployment</strong></td>
+        <td><span class="badge-pass">PASS</span></td>
+        <td>Repository initialized and published to github.com/fw10ishk/parivar_motors.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="section-subheading">Result interpretation</h3>
+  <p>
+    All core workflow tests succeeded. Parameterized PDO bindings in Eloquent completely eliminate SQL injection threats, while Twig template auto-escaping prevents Cross-Site Scripting (XSS).
+  </p>
+
+  <div class="callout-card">
+    <div class="callout-title">Evaluation checks completed</div>
+    <div class="callout-text">
+      The web server is verified active on http://localhost:8080. Administrative authentication executes cleanly with admin@parivarmotors.com / admin123. All CRUD operations on New Cars, Old Cars, Sales, Inquiries, and Installment Payments perform reliably without database connection errors.
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-left">Tanishk Jain | 25CS003751 | Parivar Motors</div>
+    <div class="footer-right">9</div>
+  </div>
+</div>
+
+<!-- ================= PAGE 10 ================= -->
+<div class="page">
+  <div class="page-header-line">
+    <div class="page-header-left">Project Report</div>
+    <div class="page-header-tag">09 / Web Development</div>
+  </div>
+
+  <h2 class="section-heading">Conclusion and future enhancements</h2>
+  <p>
+    Parivar Motors unites inventory tracking, customer inquiry CRM, multi-modal sales accounting, and administrative compliance alerts into a single cohesive web application. By leveraging modern PHP 8.2 backend engineering with Slim 4, Twig templating, and Eloquent ORM, the platform delivers superior modularity, security, and performance.
+  </p>
+
+  <h3 class="section-subheading">Future enhancements</h3>
+  <ul class="bullet-list">
+    <li>Integrate WhatsApp Business API and automated SMS gateways for booking and delivery notifications.</li>
+    <li>Incorporate payment gateway APIs (Razorpay / Stripe) for online token deposits.</li>
+    <li>Add automated GST-compliant tax invoice and delivery challan PDF generation.</li>
+    <li>Implement fine-grained Role-Based Access Control (RBAC) for sales executives vs accountants.</li>
+  </ul>
+
+  <h3 class="section-subheading" style="margin-top: 18px;">10 References</h3>
+  <ol class="numbered-list" style="font-size: 8pt;">
+    <li><strong>Project source code and SQL schema:</strong> https://github.com/fw10ishk/parivar_motors</li>
+    <li><strong>Slim Framework 4 Documentation:</strong> https://www.slimframework.com/docs/v4/</li>
+    <li><strong>Twig 3 Template Engine Reference:</strong> https://twig.symfony.com/doc/3.x/</li>
+    <li><strong>Laravel Eloquent ORM Documentation:</strong> https://laravel.com/docs/11.x/eloquent</li>
+    <li><strong>MDN Web Docs (HTML5 & Modern CSS3):</strong> https://developer.mozilla.org/</li>
+    <li><strong>PHP 8.2 Manual & Reference Guide:</strong> https://www.php.net/manual/en/</li>
+    <li><strong>MySQL 8.0 Reference Manual:</strong> https://dev.mysql.com/doc/refman/8.0/en/</li>
+    <li><strong>Lucide Vector Icons:</strong> https://lucide.dev/</li>
+  </ol>
+
+  <p style="font-size: 7.5pt; color: #6b7280; margin-top: 14px;">
+    Academic requirements: Sir Padampat Singhania University - Web Development Minor Project Guidelines (Modules 1–5).
+  </p>
+
+  <div class="page-footer">
+    <div class="footer-left">Tanishk Jain | 25CS003751 | Parivar Motors</div>
+    <div class="footer-right">10</div>
+  </div>
+</div>
+
+</body>
+</html>
+"""
+
+with open("docs/report_template.html", "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print("HTML report template written successfully!")

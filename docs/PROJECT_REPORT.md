@@ -1,9 +1,14 @@
 # Parivar Motors - Web Development Minor Project Report
 
+**University**: Sir Padampat Singhania University  
 **Course**: Web Development (Minor Project)  
 **Academic Year**: 2026-2027  
+**Student Name**: Tanishk Jain  
+**Enrollment Number**: 25CS003751  
+**Programme**: B.Tech CSE (AI-ML)  
+**Semester**: III  
+**Submission Date**: 13 November 2026  
 **Project Title**: Parivar Motors - Automobile Dealership & Inventory Management System  
-**Author / Student**: fw10ishk  
 **Repository**: https://github.com/fw10ishk/parivar_motors  
 
 ---
@@ -284,3 +289,4 @@ The **Parivar Motors** project successfully fulfills all technical requirements 
 4. **MDN Web Docs (HTML5 & Modern CSS3)**: https://developer.mozilla.org/
 5. **PHP: Hypertext Preprocessor Manual**: https://www.php.net/manual/en/
 6. **Lucide Icons**: https://lucide.dev/
+
