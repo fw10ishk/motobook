@@ -1,0 +1,13 @@
+<div id="{{ id }}" class="breakdown-modal-overlay">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3>{{ title }}</h3>
+            <button class="close-modal" data-modal-close="{{ id }}">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            {{ content|raw }}
+        </div>
+    </div>
+</div>

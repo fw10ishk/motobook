@@ -1,0 +1,221 @@
+{% extends 'layouts/app.twig' %} {% block title %}
+    Car Sales
+{% endblock %}
+{% block content %}
+    {% set salesTable = {
+        title: 'Recent Sales',
+        actions: [
+            {
+                type: 'date',
+                name: 'date',
+                placeholder: 'Filter by Date',
+                class: 'form-control'
+            },
+            {
+                type: 'select',
+                name: 'car_type',
+                options: [
+                    {
+                        value: 'All',
+                        label: 'All',
+                        selected: true
+                    },
+                    {
+                        value: 'old',
+                        label: 'Old Cars',
+                        selected: false
+                    },
+                    {
+                        value: 'new',
+                        label: 'New Cars',
+                        selected: false
+                    }
+                ],
+                class: 'form-select'
+            },
+            {
+                type: 'search',
+                name: 'search',
+                placeholder: 'Search Sales',
+                class: 'form-control'
+            }
+        ],
+        columns: [
+            {
+                label: 'Transaction ID',
+                key: 'id'
+            },
+            {
+                label: 'Customer',
+                key: 'customer'
+            },
+            {
+                label: 'Date',
+                key: 'date',
+                type: 'date',
+                format: 'd M Y'
+            },
+            {
+                label: 'Amount',
+                key: 'amount',
+                type: 'currency',
+                icon: 'indian-rupee'
+            },
+            {
+                label: 'Car Type',
+                key: 'car_type',
+                type: 'status'
+            },
+            {
+                label: 'Sale Type',
+                key: 'sale_type',
+                type: 'status'
+            },
+            {
+                label: 'Actions',
+                key: 'actions',
+                type: 'actions'
+            }
+        ],
+        data: []
+    } %}
+
+    {% for sale in sales %}
+        {% set saleData = {
+            id: '#SAL - ' ~ sale.id,
+            customer: sale.buyer_name,
+            date: sale.sale_date,
+            amount: sale.total_price,
+            car_type: {
+                type: sale.car_type == 'new' ? 'success' : 'danger',
+                value: sale.car_type
+            },
+            sale_type: {
+                type: sale.sale_type == 'full' ? 'success' : 'accent',
+                value: sale.sale_type
+            },
+            actions: [
+                {
+                    type: 'button',
+                    class: 'icon-btn success',
+                    icon: 'user',
+                    modal_id: 'customer-details-modal-' ~ sale.id
+                },
+                session.user.role == 'admin' and sale.car_type == 'new'
+                    ? {
+                        type: 'button',
+                        class: 'icon-btn accent',
+                        icon: 'user-cog',
+                        modal_id: 'dealer-details-modal-' ~ sale.id
+                    },
+                {
+                    type: 'link',
+                    href: url_for(
+                        'sales.view',
+                        {
+                            id: sale.id
+                        }
+                    ),
+                    class: 'icon-btn primary',
+                    icon: 'eye'
+                },
+                {
+                    type: 'button',
+                    class: 'icon-btn danger',
+                    icon: 'trash',
+                    modal_id: 'delete-sale-modal-' ~ sale.id
+                }
+            ]
+        } %}
+        {% set salesTable =
+            salesTable|merge({
+                data: salesTable.data|merge([saleData])
+            })
+        %}
+    {% endfor %}
+
+    <div class="page">
+        {% include 'common/header.twig' with {
+            title: 'Car Sales',
+            button: false
+        } %}
+        <div class="page-content">
+            {% for sale in sales %}
+                {% if sale.sale_type == 'full' %}
+                    {# Customer Price Modal #}
+                    {% include 'components/breakdown-modal.twig' with {
+                        id: 'customer-details-modal-' ~ sale.id,
+                        title: 'Customer Details - Sale #SAL-' ~ sale.id,
+                        content: include(
+                            'sales/_customer-details.twig',
+                            {
+                                sale: sale,
+                                selected_car: sale.selected_car
+                            }
+                        )
+                    } %}
+
+                    {# Dealer Price Modal #}
+                    {% include 'components/breakdown-modal.twig' with {
+                        id: 'dealer-details-modal-' ~ sale.id,
+                        title: 'Dealer Details - Sale #SAL-' ~ sale.id,
+                        content: include(
+                            'sales/_dealer-details.twig',
+                            {
+                                sale: sale,
+                                selected_car: sale.selected_car
+                            }
+                        )
+                    } %}
+                {% endif %}
+
+                {% include 'components/modal.twig' with {
+                    id: 'delete-sale-modal-' ~ sale.id,
+                    title: 'Delete this Sale?',
+                    description: 'This Action Cannot be Undone!',
+                    modal_type: 'danger',
+                    modal_icon: 'circle-x',
+                    action_btn_type: 'btn-danger',
+                    action_btn_text: 'Proceed',
+                    action_btn_url: url_for(
+                        'sales.destroy',
+                        {
+                            id: sale.id
+                        }
+                    )
+                } %}
+            {% endfor %}
+            <div class="stat-cards">
+                {% include 'components/stat-card.twig' with {
+                    title: 'Total',
+                    icon_class: 'primary',
+                    icon: 'file-input',
+                    value: sales_this_month,
+                    footer_class: difference_status,
+                    data: sales_difference
+                } %}
+                {% include 'components/stat-card.twig' with {
+                    title: 'Full Payments',
+                    icon_class: 'success',
+                    icon: 'circle-check-big',
+                    value: total_full_sales,
+                    footer_class: total_full_sales_this_month_class,
+                    data: total_full_sales_this_month
+                } %}
+                {% include 'components/stat-card.twig' with {
+                    title: 'Loaned',
+                    icon_class: 'danger',
+                    icon: 'credit-card',
+                    value: total_loaned_sales,
+                    footer_class: total_loaned_sales_this_month_class,
+                    data: total_loaned_sales_this_month
+                } %}
+            </div>
+            {% include 'components/table.twig' with {
+                table: salesTable
+            } %}
+        </div>
+    </div>
+
+    <script src="/js/modal.js"></script>
+{% endblock %}

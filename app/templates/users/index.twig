@@ -1,0 +1,137 @@
+{% extends 'layouts/app.twig' %} {% block title %}
+    Users
+{% endblock %}
+{% block content %}
+    {% set usersTable = {
+        title: 'All Users',
+        total_pages: total_pages,
+        total_items: total_items,
+        actions: [
+            {
+                type: 'select',
+                name: 'status',
+                options: [
+                    {
+                        value: 'All',
+                        label: 'All',
+                        selected: true
+                    },
+                    {
+                        value: 'active',
+                        label: 'Active',
+                        selected: false
+                    },
+                    {
+                        value: 'inactive',
+                        label: 'Inactive',
+                        selected: false
+                    }
+                ],
+                class: 'form-select'
+            },
+            {
+                type: 'search',
+                name: 'search',
+                placeholder: 'Search Users',
+                class: 'form-control'
+            }
+        ],
+        columns: [
+            {
+                label: 'User ID',
+                key: 'id'
+            },
+            {
+                label: 'Full Name',
+                key: 'full_name'
+            },
+            {
+                label: 'Email',
+                key: 'email'
+            },
+            {
+                label: 'Role',
+                key: 'role'
+            },
+            {
+                label: 'Status',
+                key: 'status',
+                type: 'status'
+            },
+            {
+                label: 'Actions',
+                key: 'actions',
+                type: 'actions'
+            }
+        ],
+        data: []
+    } %}
+
+    {% for user in users %}
+        {% set saleData = {
+            id: user.id,
+            full_name: user.full_name,
+            email: user.email,
+            role: user.role,
+            status: {
+                type: user.status == 'active' ? 'success' : 'danger',
+                value: user.status
+            },
+            actions: [
+                {
+                    type: 'link',
+                    href: url_for(
+                        'users.edit',
+                        {
+                            id: user.id
+                        }
+                    ),
+                    class: 'icon-btn primary',
+                    icon: 'square-pen'
+                },
+                {
+                    type: 'button',
+                    class: 'icon-btn danger',
+                    icon: 'trash',
+                    modal_id: 'delete-user-modal-' ~ user.id
+                }
+            ]
+        } %}
+        {% set usersTable =
+            usersTable|merge({
+                data: usersTable.data|merge([saleData])
+            })
+        %}
+    {% endfor %}
+
+    <div class="page">
+        {% include 'common/header.twig' with {
+            title: 'Users',
+            button: false
+        } %}
+        <div class="page-content">
+            {% for user in users %}
+                {% include 'components/modal.twig' with {
+                    id: 'delete-user-modal-' ~ user.id,
+                    title: 'Delete this User?',
+                    description: 'This Action Cannot be Undone!',
+                    modal_type: 'danger',
+                    modal_icon: 'circle-x',
+                    action_btn_type: 'btn-danger',
+                    action_btn_text: 'Proceed',
+                    action_btn_url: url_for(
+                        'users.destroy',
+                        {
+                            id: user.id
+                        }
+                    )
+                } %}
+            {% endfor %}
+            {% include 'components/table.twig' with {
+                table: usersTable
+            } %}
+        </div>
+    </div>
+
+    <script src="/js/modal.js"></script>
+{% endblock %}

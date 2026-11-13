@@ -1,0 +1,39 @@
+<div id="{{ id }}" class="modal-overlay">
+    <div class="modal">
+        <div class="icon circle {{ modal_type }}">
+            <i data-lucide="{{ modal_icon }}"></i>
+        </div>
+        <h3>{{ title }}</h3>
+        {% if description %}
+            <p>
+                {{ description }}
+            </p>
+        {% endif %}
+        <div class="modal-actions">
+            {% if action_btn_type == 'btn-danger' %}
+                <form action="{{ action_btn_url }}" method="POST">
+                    <input type="hidden" name="_METHOD" value="DELETE" />
+                    <button class="btn btn-danger" type="submit">
+                        {{ action_btn_text }}
+                    </button>
+                </form>
+            {% endif %}
+            {% if
+                action_btn_type == 'btn-success'
+                    or action_btn_type == 'btn-warning' %}
+                <form action="{{ action_btn_url }}" method="POST">
+                    <input type="hidden" name="_METHOD" value="PUT" />
+                    <button class="btn {{ action_btn_type }}" type="submit">
+                        {{ action_btn_text }}
+                    </button>
+                </form>
+            {% endif %}
+            <button
+                data-modal-close="{{ id }}"
+                class="btn btn-background-secondary"
+            >
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>

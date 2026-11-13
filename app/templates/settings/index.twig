@@ -1,0 +1,78 @@
+{% extends 'layouts/app.twig' %} {% block title %}
+    Settings
+{% endblock %}
+{% block content %}
+    <div class="page">
+        {% include 'common/header.twig' with {
+            title: 'Settings',
+            button: false
+        } %}
+        <div class="page-content">
+            <form
+                action="{{ url_for('settings.update-settings') }}"
+                method="POST"
+                class="settings-form"
+            >
+                <input type="hidden" name="_METHOD" value="PUT" />
+                <div class="form-group">
+                    <label for="full_name">Full Name*</label>
+                    <input
+                        type="text"
+                        name="full_name"
+                        id="full_name"
+                        class="form-control"
+                        value="{{ user.full_name }}"
+                        required
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="email">Email*</label>
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        class="form-control"
+                        value="{{ user.email }}"
+                        required
+                    />
+                </div>
+                <input type="submit" value="Update" class="btn btn-primary" />
+            </form>
+            <h3>Change Password</h3>
+            <form
+                action="{{ url_for('settings.change-password') }}"
+                method="POST"
+                class="settings-form"
+            >
+                <input type="hidden" name="_METHOD" value="PUT" />
+                <div class="form-group">
+                    <label for="current_password">Current Password*</label>
+                    <input
+                        type="password"
+                        name="current_password"
+                        id="current_password"
+                        class="form-control"
+                        placeholder="Enter your current password"
+                        required
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="new_password">New Password*</label>
+                    <input
+                        type="password"
+                        name="new_password"
+                        id="new_password"
+                        class="form-control"
+                        placeholder="Enter your new password"
+                        required
+                    />
+                </div>
+                <input
+                    type="submit"
+                    value="Change Password"
+                    class="btn btn-primary"
+                />
+            </form>
+        </div>
+    </div>
+{% endblock %}

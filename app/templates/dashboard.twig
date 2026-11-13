@@ -1,0 +1,224 @@
+{% extends 'layouts/app.twig' %} {% block title %}
+    Dashboard
+{% endblock %}
+{% block content %}
+    {% set salesTable = {
+        title: 'Recent Sales',
+        actions: [
+            {
+                type: 'link',
+                url: url_for('sales.index'),
+                class: 'btn-underline',
+                value: 'View All'
+            }
+        ],
+        columns: [
+            {
+                label: 'Transaction ID',
+                key: 'id'
+            },
+            {
+                label: 'Customer',
+                key: 'customer'
+            },
+            {
+                label: 'Date',
+                key: 'date',
+                type: 'date',
+                format: 'd M Y'
+            },
+            {
+                label: 'Amount',
+                key: 'amount',
+                type: 'currency',
+                icon: 'indian-rupee'
+            },
+            {
+                label: 'Sale Type',
+                key: 'sale_type',
+                type: 'status'
+            }
+        ],
+        data: []
+    } %}
+
+    {% for sale in recent_sales %}
+        {% set saleData = {
+            id: '#SAL - ' ~ sale.id,
+            customer: sale.buyer_name,
+            date: sale.sale_date,
+            amount: sale.total_price,
+            sale_type: {
+                type: sale.sale_type == 'full' ? 'success' : 'accent',
+                value: sale.sale_type
+            }
+        } %}
+        {% set salesTable =
+            salesTable|merge({
+                data: salesTable.data|merge([saleData])
+            })
+        %}
+    {% endfor %}
+
+    {% set newCarsTable = {
+        title: 'New Cars Sales Performance',
+        columns: [
+            {
+                label: 'Sale ID',
+                key: 'id'
+            },
+            {
+                label: 'Car Name',
+                key: 'car_name'
+            },
+            {
+                label: 'Net On Road Price',
+                key: 'base_amount',
+                type: 'currency',
+                icon: 'indian-rupee'
+            },
+            {
+                label: 'Sold Amount',
+                key: 'sold_amount',
+                type: 'currency',
+                icon: 'indian-rupee'
+            },
+            {
+                label: 'Profit/Loss',
+                key: 'profit_type',
+                type: 'status'
+            }
+        ],
+        data: new_car_sales
+    } %}
+
+    {% set oldCarsTable = {
+        title: 'Old Cars Sales Performance',
+        columns: [
+            {
+                label: 'Sale ID',
+                key: 'id'
+            },
+            {
+                label: 'Car Name',
+                key: 'car_name'
+            },
+            {
+                label: 'Base Amount + Charges',
+                key: 'base_amount',
+                type: 'currency',
+                icon: 'indian-rupee'
+            },
+            {
+                label: 'Sold Amount',
+                key: 'sold_amount',
+                type: 'currency',
+                icon: 'indian-rupee'
+            },
+            {
+                label: 'Profit/Loss',
+                key: 'profit_type',
+                type: 'status'
+            }
+        ],
+        data: old_car_sales
+    } %}
+
+    {% set insuranceExpiryTable = {
+        title: 'Upcoming Insurance Expiry',
+        columns: [
+            {
+                label: 'Car ID',
+                key: 'id'
+            },
+            {
+                label: 'Car Name',
+                key: 'car_name'
+            },
+            {
+                label: 'Expiry Date',
+                key: 'insurance_expiry',
+                type: 'date',
+                format: 'd M Y'
+            },
+            {
+                label: 'Status',
+                key: 'status_type',
+                type: 'status'
+            }
+        ],
+        data: upcoming_insurance_expiry
+    } %}
+
+    <div class="page">
+        {% include 'common/header.twig' with {
+            title: 'Dashboard',
+            button: false
+        } %}
+        <div class="page-content">
+            <div class="welcome-container">
+                <h1>Welcome Back, {{ session.user.full_name }} 👋</h1>
+                <p>
+                    Here's what's happening with your dealership today.
+                </p>
+            </div>
+            <div class="stat-cards">
+                {% include 'components/stat-card.twig' with {
+                    title: 'Cars Sold',
+                    icon_class: 'primary',
+                    icon: 'car',
+                    value: total_sold_cars_this_month,
+                    footer_class: total_cars_this_month_class,
+                    data: total_cars_this_month
+                } %}
+                {% include 'components/stat-card.twig' with {
+                    title: 'Revenue',
+                    icon_class: 'success',
+                    icon: 'chart-line',
+                    value: total_revenue_this_month|number_format,
+                    value_icon: 'indian-rupee',
+                    footer_class: total_revenue_this_month_class,
+                    data: total_revenue_this_month_string
+                } %}
+                {% include 'components/stat-card.twig' with {
+                    title: 'Loans Approved',
+                    icon_class: 'accent',
+                    icon: 'landmark',
+                    value: total_loaned_sales_this_month,
+                    footer_class: total_loaned_sales_this_month_class,
+                    data: total_loaned_sales_this_month_string
+                } %}
+                {# {% include 'components/stat-card.twig' with {
+                    title: 'Insurance Policies',
+                    icon_class: 'secondary',
+                    icon: 'shield',
+                    value: '148',
+                    footer_class: 'success',
+                    data: '2.5% from last month'
+                } %} #}
+                {# {% include 'components/stat-card.twig' with {
+                    title: 'Pending Inquiries',
+                    icon_class: 'danger',
+                    icon: 'inbox',
+                    value: '20',
+                    footer_class: 'success',
+                    data: '-5% from last month'
+                } %} #}
+            </div>
+            {% include 'components/table.twig' with {
+                table: salesTable
+            } %}
+            {% include 'components/table.twig' with {
+                table: newCarsTable
+            } %}
+
+            {% include 'components/table.twig' with {
+                table: oldCarsTable
+            } %}
+
+            {% include 'components/table.twig' with {
+                table: insuranceExpiryTable
+            } %}
+        </div>
+    </div>
+{% endblock %}

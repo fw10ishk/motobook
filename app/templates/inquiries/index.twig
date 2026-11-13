@@ -1,0 +1,221 @@
+{% extends 'layouts/app.twig' %} {% block title %}
+    Inquiries
+{% endblock %}
+{% block content %}
+    {% set inquiriesTable = {
+        title: 'Recent Inquiries',
+        actions: [
+            {
+                type: 'date',
+                name: 'date',
+                placeholder: 'Filter by Date',
+                class: 'form-control'
+            },
+            {
+                type: 'select',
+                name: 'status',
+                options: [
+                    {
+                        value: 'All',
+                        label: 'All',
+                        selected: true
+                    },
+                    {
+                        value: 'completed',
+                        label: 'Completed',
+                        selected: false
+                    },
+                    {
+                        value: 'pending',
+                        label: 'Pending',
+                        selected: false
+                    }
+                ],
+                class: 'form-select'
+            },
+            {
+                type: 'search',
+                name: 'search',
+                placeholder: 'Search Inquiries',
+                class: 'form-control'
+            }
+        ],
+        columns: [
+            {
+                label: 'Inquiry ID',
+                key: 'id'
+            },
+            {
+                label: 'Customer',
+                key: 'customer_name'
+            },
+            {
+                label: 'Vehicle',
+                key: 'vehicle_of_interest'
+            },
+            {
+                label: 'Date',
+                key: 'created_at',
+                type: 'date',
+                format: 'd M Y'
+            },
+            {
+                label: 'Status',
+                key: 'status_type',
+                type: 'status'
+            },
+            {
+                label: 'Actions',
+                type: 'actions',
+                key: 'actions'
+            }
+        ],
+        data: []
+    } %}
+
+    {% for inquiry in inquiries %}
+        {% set inquiryData = {
+            id: '#INQ - ' ~ inquiry.id,
+            customer_name: inquiry.customer_name,
+            vehicle_of_interest: inquiry.vehicle_of_interest,
+            created_at: inquiry.created_at,
+            status_type: {
+                type: inquiry.status == 'completed' ? 'success' : 'warning',
+                value: inquiry.status
+            },
+            actions: [
+                inquiry.status == 'pending'
+                    ? {
+                        type: 'button',
+                        class: 'icon-btn success',
+                        icon: 'check',
+                        modal_id: 'complete-inquiry-modal-' ~ inquiry.id
+                    }
+                    : {
+                        type: 'button',
+                        class: 'icon-btn danger',
+                        icon: 'x',
+                        modal_id: 'pending-inquiry-modal-' ~ inquiry.id
+                    },
+                {
+                    type: 'link',
+                    href: url_for(
+                        'inquiries.view',
+                        {
+                            id: inquiry.id
+                        }
+                    ),
+                    class: 'icon-btn primary',
+                    icon: 'eye'
+                },
+                {
+                    type: 'link',
+                    href: url_for(
+                        'inquiries.edit',
+                        {
+                            id: inquiry.id
+                        }
+                    ),
+                    class: 'icon-btn success',
+                    icon: 'square-pen'
+                },
+                {
+                    type: 'button',
+                    class: 'icon-btn danger',
+                    icon: 'trash',
+                    modal_id: 'delete-inquiry-modal-' ~ inquiry.id
+                }
+            ]
+        } %}
+        {% set inquiriesTable =
+            inquiriesTable|merge({
+                data: inquiriesTable.data|merge([inquiryData])
+            })
+        %}
+    {% endfor %}
+
+    <div class="page">
+        {% include 'common/header.twig' with {
+            title: 'Inquiries',
+            button: false
+        } %}
+        <div class="page-content">
+            {% for inquiry in inquiries %}
+                {% include 'components/modal.twig' with {
+                    id: 'delete-inquiry-modal-' ~ inquiry.id,
+                    title: 'Delete this Inquiry?',
+                    description: 'This Action Cannot be Undone!',
+                    modal_type: 'danger',
+                    modal_icon: 'circle-x',
+                    action_btn_type: 'btn-danger',
+                    action_btn_text: 'Proceed',
+                    action_btn_url: url_for(
+                        'inquiries.destroy',
+                        {
+                            id: inquiry.id
+                        }
+                    )
+                } %}
+                {% include 'components/modal.twig' with {
+                    id: 'complete-inquiry-modal-' ~ inquiry.id,
+                    title: 'Complete this Inquiry?',
+                    modal_type: 'success',
+                    modal_icon: 'check',
+                    action_btn_type: 'btn-success',
+                    action_btn_text: 'Proceed',
+                    action_btn_url: url_for(
+                        'inquiries.change-status',
+                        {
+                            id: inquiry.id
+                        }
+                    )
+                } %}
+                {% include 'components/modal.twig' with {
+                    id: 'pending-inquiry-modal-' ~ inquiry.id,
+                    title: 'Change to pending?',
+                    modal_type: 'warning',
+                    modal_icon: 'x',
+                    action_btn_type: 'btn-warning',
+                    action_btn_text: 'Proceed',
+                    action_btn_url: url_for(
+                        'inquiries.change-status',
+                        {
+                            id: inquiry.id
+                        }
+                    )
+                } %}
+            {% endfor %}
+            <div class="stat-cards">
+                {% include 'components/stat-card.twig' with {
+                    title: 'Total Inquiries',
+                    icon_class: 'primary',
+                    icon: 'notebook-tabs',
+                    value: total_inquiries_this_month,
+                    footer_class: percentage_status_class,
+                    data: total_inquiries_this_month_percentage_string
+                } %}
+                {% include 'components/stat-card.twig' with {
+                    title: 'Completed Inquiries',
+                    icon_class: 'success',
+                    icon: 'check-circle',
+                    value: total_completed_inquiries_this_month,
+                    footer_class: completed_percentage_status_class,
+                    data: total_completed_inquiries_this_month_percentage_string
+                } %}
+                {% include 'components/stat-card.twig' with {
+                    title: 'Pending Inquiries',
+                    icon_class: 'danger',
+                    icon: 'x-circle',
+                    value: total_pending_inquiries_this_month,
+                    footer_class: pending_percentage_status_class,
+                    data: total_pending_inquiries_this_month_percentage_string
+                } %}
+            </div>
+
+            {% include 'components/table.twig' with {
+                table: inquiriesTable
+            } %}
+        </div>
+    </div>
+    <script src="/js/modal.js"></script>
+{% endblock %}

@@ -1,0 +1,33 @@
+<div class="view-inquiry sale-modal">
+    <div class="inquiry-row">
+        <div class="inquiry-column">
+            <h4>Vehicle Pricing Breakdown</h4>
+            {% set final_price = selected_car.current_price %}
+            <table>
+                <thead>
+                    <tr>
+                        <td>Particulars</td>
+                        <td>Customer Price</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Base Price</td>
+                        <td>₹{{ selected_car.current_price|number_format }}</td>
+                    </tr>
+                    {% for charge in selected_car.extra_charges %}
+                        {% set final_price = final_price + charge.amount %}
+                        <tr>
+                            <td>{{ charge.description }}</td>
+                            <td>₹{{ charge.amount|number_format }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr class="blue-row">
+                        <td>Total Price</td>
+                        <td>₹{{ final_price|number_format }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

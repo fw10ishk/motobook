@@ -1,0 +1,356 @@
+{% extends 'layouts/app.twig' %}
+
+{% block title %}
+    {{ car.manufacturer_name }} {{ car.model_name }}
+{% endblock %}
+
+{% block content %}
+    <div class="page">
+        {% include 'common/header.twig' with {
+            title: car.manufacturer_name ~ ' ' ~ car.model_name,
+            button: true,
+            button_url: url_for(
+                'new-cars.edit',
+                {
+                    id: car.id
+                }
+            ),
+            button_text: 'Edit Car',
+            button_icon: 'square-pen',
+            back_button: true,
+            back_url: url_for('new-cars.index')
+        } %}
+        <div class="page-content">
+            {% if car.main_image or (car.additional_image|length) > 0 %}
+                <div class="car-images">
+                    {% if car.main_image %}
+                        <img
+                            src="/uploads/new-cars/{{ car.main_image }}"
+                            alt="Main Image"
+                            class="main-image"
+                        />
+                    {% endif %}
+                    {% if (car.additional_images|length) > 0 %}
+                        <div class="additional-images">
+                            {% for image in car.additional_images %}
+                                <img
+                                    src="/uploads/new-cars/{{ image.image_url }}"
+                                    alt="Additional Image"
+                                />
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            <div class="car-details">
+                <div class="main-details">
+                    <div class="car-details-card basic-information">
+                        <h4>Basic Information</h4>
+                        <div class="details">
+                            <div class="detail">
+                                <span>Docket Number</span>
+                                <p>
+                                    {{ car.docket_number }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Entry Type</span>
+                                <p>
+                                    {{ car.entry_type }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Booking Date</span>
+                                <p>
+                                    {{ car.booking_date|date('d F Y') }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Delivery Date</span>
+                                <p>
+                                    {{ car.delivery_date|date('d F Y') }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="car-details-card customer-details">
+                        <h4>Customer Details</h4>
+                        <div class="details">
+                            <div class="detail">
+                                <span>Customer Name</span>
+                                <p>
+                                    {{ car.customer_name }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Phone</span>
+                                <p>
+                                    {{ car.customer_phone }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Email</span>
+                                <p>
+                                    {{ car.email }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Date of Birth</span>
+                                <p>
+                                    {{ car.customer_dob|date('d F Y') }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Address</span>
+                                <p>
+                                    {{ car.customer_address1 }} <br />
+                                    {{ car.customer_address2 }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>City</span>
+                                <p>
+                                    {{ car.city_name }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Pincode</span>
+                                <p>
+                                    {{ car.pincode }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="car-details-card nominee-details">
+                        <h4>Nominee Details</h4>
+                        <div class="details">
+                            <div class="detail">
+                                <span>Nominee Relationship</span>
+                                <p>
+                                    {{ car.nominee_relationship|capitalize }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Nominee Name</span>
+                                <p>
+                                    {{ car.nominee_name }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Nominee Date of Birth</span>
+                                <p>
+                                    {{ car.nominee_dob|date('d F Y') }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="car-details-card vehicle-details">
+                        <h4>Vehicle Information</h4>
+                        <div class="details">
+                            <div class="detail">
+                                <span>Manufacturer</span>
+                                <p>
+                                    {{ car.manufacturer_name }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Model</span>
+                                <p>
+                                    {{ car.model_name }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Color</span>
+                                <p>
+                                    {{ car.color }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Manufacture Year</span>
+                                <p>
+                                    {{ car.manufacture_year }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Fuel Type</span>
+                                <p>
+                                    {{ car.fuel_type }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Choice Number</span>
+                                <p>
+                                    {{ car.choice_number }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Registration Number</span>
+                                <p>
+                                    {{ car.registration_no }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Chassis Number</span>
+                                <p>
+                                    {{ car.chassis_no }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Engine Number</span>
+                                <p>
+                                    {{ car.engine_no }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="car-details-card additional-details">
+                        <h4>Additional Details</h4>
+                        <div class="details">
+                            <div class="detail">
+                                <span>Dealer</span>
+                                <p>
+                                    {{ car.dealer_name }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Location</span>
+                                <p>
+                                    {{ car.location }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Hire Purchase</span>
+                                <p>
+                                    {{ car.hp_name|capitalize }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Executive Branch</span>
+                                <p>
+                                    {{ car.executive_branch_name|capitalize }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Executive</span>
+                                <p>
+                                    {{ car.executive_name|capitalize }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Insurance Company</span>
+                                <p>
+                                    {{ car.insurance_company_name|capitalize }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>RTO</span>
+                                <p>
+                                    {{ car.rto_name|capitalize }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Parsing Status</span>
+                                <p>
+                                    {{ car.parsing_status|capitalize }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Number Plate Type</span>
+                                <p>
+                                    {{ car.number_plate|capitalize }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Scheme</span>
+                                <p>
+                                    {{ car.scheme|capitalize }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Broker Name</span>
+                                <p>
+                                    {{ car.broker_name }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="car-details-card remarks">
+                        <h4>Other Remarks</h4>
+                        <p class="remarks-content">
+                            {{ car.other_remarks }}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="additional-details">
+                    <div class="car-details-card pricing-details">
+                        <div class="price">
+                            {% if car.status == 'unsold' %}
+                                <div class="status danger">
+                                    {{ car.status|capitalize }}
+                                </div>
+                            {% else %}
+                                <div class="status success">
+                                    {{ car.status|capitalize }}
+                                </div>
+                            {% endif %}
+                            <h2>
+                                <i data-lucide="indian-rupee"></i>
+                                <!-- prettier-ignore -->
+                                {{ car.ex_showroom_price|number_format }}
+                            </h2>
+                            <p>
+                                Ex-Showroom Price
+                            </p>
+                        </div>
+                        {% if car.status == 'unsold' %}
+                            <a
+                                href="{{
+                                url_for(
+                                    'sales.create'
+                                )
+                                }}?car_type=new&car_id={{ car.id }}"
+                                class="btn btn-primary"
+                            >
+                                <i data-lucide="file-input"></i>
+                                Create Sale
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="car-details-card documents">
+                        <h4>Vehicle Documents</h4>
+                        <div class="form-group">
+                            <div class="form-group row">
+                                <i data-lucide="id-card"></i>
+                                <a
+                                    href="/uploads/documents/{{ car.kyc }}"
+                                    target="_blank"
+                                >
+                                    KYC
+                                </a>
+                            </div>
+                            <div class="form-group row">
+                                <i data-lucide="file-text"></i>
+                                <div class="form-group row">
+                                    <a
+                                        href="/uploads/documents/{{ car.deal_agreement }}"
+                                    >
+                                        Deal Agreement
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/modal.js"></script>
+{% endblock %}

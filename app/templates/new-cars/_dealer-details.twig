@@ -1,0 +1,149 @@
+<div class="view-inquiry sale-modal">
+    <div class="inquiry-row">
+        <div class="inquiry-column">
+            <h4>Vehicle Pricing Breakdown</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <td>Particulars</td>
+                        <td>Dealer Price</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Ex-Showroom Price</td>
+                        <td>
+                            ₹{{ selected_car.dealer_ex_showroom_price|number_format }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>RTO Tax</td>
+                        <td>
+                            ₹{{ selected_car.dealer_rto_tax|number_format }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Insurance</td>
+                        <td>
+                            ₹{{ selected_car.dealer_insurance|number_format }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>AMC/GMC Tax</td>
+                        <td>
+                            ₹{{ selected_car.dealer_amc_gmc_tax|number_format }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Extended Warranty</td>
+                        <td>
+                            ₹{{ selected_car.dealer_ext_warranty|number_format }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Accessories</td>
+                        <td>
+                            ₹{{ selected_car.dealer_accessories|number_format }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Parivar Accessories</td>
+                        <td>
+                            ₹{{ selected_car.dealer_krunal_accessories|number_format }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Fast Tag</td>
+                        <td>
+                            ₹{{ selected_car.dealer_fast_tag|number_format }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>TCS</td>
+                        <td>₹{{ selected_car.dealer_tcs|number_format }}</td>
+                    </tr>
+                    <tr>
+                        <td>Loyalty Card</td>
+                        <td>
+                            ₹{{ selected_car.dealer_loyalty_card|number_format }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Driver Price</td>
+                        <td>
+                            ₹{{ selected_car.dealer_driver_price|number_format }}
+                        </td>
+                    </tr>
+                    <tr class="blue-row">
+                        <td>Total On-Road Price</td>
+                        <td>
+                            ₹{{ selected_car.dealer_total_on_road|number_format }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Consumer Offer</td>
+                        <td>
+                            {{ selected_car.dealer_consumer_offer > 0
+                                ? '-₹'
+                                    ~ (selected_car.dealer_consumer_offer|number_format)
+                                : '₹'
+                                    ~ (selected_car.dealer_consumer_offer|number_format) }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Corporate Discount</td>
+                        <td>
+                            {{ selected_car.corporate_discount > 0
+                                ? '-₹'
+                                    ~ (selected_car.dealer_corporate_discount|number_format)
+                                : '₹'
+                                    ~ (selected_car.dealer_corporate_discount|number_format) }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Other Discount</td>
+                        <td>
+                            {{ selected_car.dealer_other_discount > 0
+                                ? '-₹'
+                                    ~ (selected_car.dealer_other_discount|number_format)
+                                : '₹'
+                                    ~ (selected_car.dealer_other_discount|number_format) }}
+                        </td>
+                    </tr>
+                    <tr class="blue-row">
+                        <td>Net On-Road Price</td>
+                        <td>
+                            ₹{{ selected_car.dealer_net_on_road|number_format }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Disbursement</td>
+                        <td>
+                            {{ selected_car.dealer_disbursement > 0
+                                ? '-₹'
+                                    ~ (selected_car.dealer_disbursement|number_format)
+                                : '₹'
+                                    ~ (selected_car.dealer_disbursement|number_format) }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Down Payment</td>
+                        <td>
+                            {{ selected_car.dealer_down_payment > 0
+                                ? '-₹'
+                                    ~ (selected_car.dealer_down_payment|number_format)
+                                : '₹'
+                                    ~ (selected_car.dealer_down_payment|number_format) }}
+                        </td>
+                    </tr>
+                    <tr class="blue-row">
+                        <td>Net Short Payment</td>
+                        <td>
+                            ₹{{ selected_car.dealer_net_short_payment|number_format }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

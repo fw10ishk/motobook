@@ -1,0 +1,28 @@
+<div class="stat-card">
+    <div class="stat-card-header">
+        <p>
+            {{ title }}
+        </p>
+        <div class="icon {{ icon_class }}">
+            <i data-lucide="{{ icon }}"></i>
+        </div>
+    </div>
+    <h3>
+        {% if value_icon %}
+            <i data-lucide="{{ value_icon }}"></i>
+        {% endif %}
+        {{ value }}
+    </h3>
+    <div class="stat-card-footer {{ footer_class }}">
+        {% if footer_class == 'success' %}
+            <i data-lucide="trending-up"></i>
+        {% elseif footer_class == 'warning' %}
+            <i data-lucide="triangle-alert"></i>
+        {% elseif footer_class == 'danger' %}
+            <i data-lucide="trending-down"></i>
+        {% endif %}
+        <p>
+            {{ data }}
+        </p>
+    </div>
+</div>

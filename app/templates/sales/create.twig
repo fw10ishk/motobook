@@ -1,0 +1,379 @@
+{% extends 'layouts/app.twig' %}
+
+{% block title %}
+    Add New Sale
+{% endblock %}
+
+{% block content %}
+    <div class="page">
+        {% include 'common/header.twig' with {
+            title: 'Add New Sale',
+            button: false,
+            back_button: true,
+            back_url: url_for('sales.index')
+        } %}
+        <div class="page-content">
+            <form
+                action="{{ url_for('sales.store') }}"
+                method="POST"
+                enctype="multipart/form-data"
+                class="form-container"
+            >
+                <div class="form-legend">
+                    <h4>Sale Information</h4>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="car_type">Car Type*</label>
+                            {% if selected_car_type %}
+                                <select name="car_type" id="car_type" required>
+                                    <option
+                                        value="{{ selected_car_type }}"
+                                        selected
+                                    >
+                                        {{ selected_car_type|capitalize }}
+                                    </option>
+                                </select>
+                            {% else %}
+                                <select name="car_type" id="car_type" required>
+                                    <option value="" disabled selected>
+                                        Select Car Type
+                                    </option>
+                                    <option value="new">
+                                        New Car
+                                    </option>
+                                    <option value="old">
+                                        Used Car
+                                    </option>
+                                </select>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="car_id">Select Vehicle*</label>
+                            {% if selected_car %}
+                                <select name="car_id" id="car_id" required>
+                                    <option
+                                        value="{{ selected_car.id }}"
+                                        selected
+                                    >
+                                        {{ selected_car.manufacturer_name }}&nbsp;{{
+                                            selected_car.model_name
+                                        }}
+                                    </option>
+                                </select>
+                            {% else %}
+                                <select name="car_id" id="car_id" required>
+                                    <option value="" selected>
+                                        First Select Car Type
+                                    </option>
+                                </select>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if selected_car_type == 'new' %}
+                        <div class="form-group row">
+                            <div class="form-group">
+                                <label for="buyer_name">Buyer Name*</label>
+                                {% if selected_car_type == 'new' %}
+                                    <input
+                                        type="text"
+                                        name="buyer_name"
+                                        id="buyer_name"
+                                        placeholder="Enter Buyer Name"
+                                        value="{{ selected_car.customer_name }}"
+                                        readonly
+                                        required
+                                    />
+                                {% else %}
+                                    <input
+                                        type="text"
+                                        name="buyer_name"
+                                        id="buyer_name"
+                                        placeholder="Enter Buyer Name"
+                                        required
+                                    />
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label for="sale_date">Sale Date*</label>
+                        <input
+                            type="date"
+                            name="sale_date"
+                            id="sale_date"
+                            required
+                        />
+                    </div>
+                </div>
+                {% if selected_car_type == 'old' %}
+                    <div class="form-legend">
+                        <h4>Buyer Information</h4>
+                        <div class="form-group row">
+                            <div class="form-group">
+                                <label for="buyer_name">Buyer Name*</label>
+                                <input
+                                    type="text"
+                                    name="buyer_name"
+                                    id="buyer_name"
+                                    placeholder="Enter Buyer Name"
+                                    required
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="contact">
+                                    Buyer Contact Number*
+                                </label>
+                                <input
+                                    type="text"
+                                    name="contact"
+                                    id="contact"
+                                    placeholder="Enter Buyer Contact Number"
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="form-group">
+                                <label for="address_line_1">
+                                    Address Line 1*
+                                </label>
+                                <input
+                                    type="text"
+                                    name="address_line_1"
+                                    id="address_line_1"
+                                    placeholder="Enter Address Line 1"
+                                    required
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="address_line_2">
+                                    Address Line 2
+                                </label>
+                                <input
+                                    type="text"
+                                    name="address_line_2"
+                                    id="address_line_2"
+                                    placeholder="Enter Address Line 2"
+                                />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="form-group">
+                                <label for="city_name">City*</label>
+                                <input
+                                    type="text"
+                                    name="city_name"
+                                    id="city_name"
+                                    class="autocomplete"
+                                    data-autocomplete-url="{{
+                                    url_for(
+                                        'cities.search'
+                                    )
+                                    }}"
+                                    placeholder="Enter City Name"
+                                    required
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="pincode">Pincode*</label>
+                                <input
+                                    type="text"
+                                    name="pincode"
+                                    id="pincode"
+                                    placeholder="Enter Pincode"
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="form-group">
+                                <label for="email">Email*</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    id="email"
+                                    placeholder="Enter Email"
+                                    required
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="dob">Date of Birth*</label>
+                                <input
+                                    type="date"
+                                    name="dob"
+                                    id="dob"
+                                    required
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-legend">
+                        <h4>Buyer Documents</h4>
+                        <div class="form-group">
+                            <label for="pan_card">Pan Card*</label>
+                            <input
+                                type="file"
+                                name="pan_card"
+                                id="pan_card"
+                                accept=".pdf,.jpg,.jpeg,.png"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="aadhar_card">Aadhar Card*</label>
+                            <input
+                                type="file"
+                                name="aadhar_card"
+                                id="aadhar_card"
+                                accept=".pdf,.jpg,.jpeg,.png"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="driving_license">
+                                Driving License*
+                            </label>
+                            <input
+                                type="file"
+                                name="driving_license"
+                                id="driving_license"
+                                accept=".pdf,.jpg,.jpeg,.png"
+                                required
+                            />
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="form-legend">
+                    <h4>Pricing Details</h4>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="sale_type">Sale Type*</label>
+                            <select name="sale_type" id="sale_type" required>
+                                <option value="" disabled selected>
+                                    Select Sale Type
+                                </option>
+                                <option value="full">
+                                    Payment
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="total_price">Total Price*</label>
+                            {% if selected_car %}
+                                {% if selected_car_type == 'old' %}
+                                    {# Calculate Final Price #}
+                                    {% set finalPrice =
+                                        selected_car.current_price
+                                    %}
+                                    {% for charge in selected_car.extra_charges %}
+                                        {% set finalPrice = finalPrice
+                                            + charge.amount
+                                        %}
+                                    {% endfor %}
+                                    <input
+                                        type="number"
+                                        name="total_price"
+                                        id="total_price"
+                                        placeholder="Enter Total Price"
+                                        value="{{ finalPrice }}"
+                                        required
+                                    />
+                                {% else %}
+                                    <input
+                                        type="number"
+                                        name="total_price"
+                                        id="total_price"
+                                        placeholder="Enter Total Price"
+                                        value="{{
+                                        selected_car.net_short_payment
+                                        }}"
+                                        required
+                                    />
+                                {% endif %}
+                            {% else %}
+                                <input
+                                    type="number"
+                                    name="total_price"
+                                    id="total_price"
+                                    placeholder="Enter Total Price"
+                                    required
+                                />
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    id="loan-details"
+                    class="form-legend"
+                    style="display: none;"
+                >
+                    <h4>Loan Details</h4>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="loan_amount">Loan Amount*</label>
+                            <input
+                                type="number"
+                                name="loan_amount"
+                                id="loan_amount"
+                                placeholder="Enter Loan Amount"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="interest_rate">
+                                Interest Rate (%)*
+                            </label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="interest_rate"
+                                id="interest_rate"
+                                placeholder="Enter Interest Rate"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="number_of_parts">
+                                Number of Installments*
+                            </label>
+                            <input
+                                type="number"
+                                name="number_of_parts"
+                                id="number_of_parts"
+                                placeholder="Enter Number of Installments"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="installment_amount">
+                                Installment Amount*
+                            </label>
+                            <input
+                                type="number"
+                                name="installment_amount"
+                                id="installment_amount"
+                                placeholder="Monthly Installment Amount"
+                                readonly
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-container-actions">
+                    <a
+                        href="{{ url_for('sales.index') }}"
+                        class="btn btn-background-secondary"
+                    >
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i data-lucide="save"></i>
+                        Record Sale
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="/js/sales.js"></script>
+{% endblock %}

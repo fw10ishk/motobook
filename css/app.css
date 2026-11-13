@@ -1,0 +1,605 @@
+@import "global.css";
+@import "media_queries.css";
+
+/* ===============================
+   View Inquiry Page
+   =============================== */
+
+.view-inquiry,
+.view-dealer,
+.view-customer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    background-color: var(--color-background);
+}
+
+.view-inquiry .inquiry-header,
+.view-dealer .dealer-header,
+.view-customer .customer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 1rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--color-text-transparent);
+}
+
+.view-inquiry .inquiry-header p,
+.view-dealer .dealer-header p,
+.view-customer .customer-header p {
+    color: var(--color-text-light);
+}
+
+.view-inquiry .inquiry-row,
+.view-dealer .dealer-row,
+.view-customer .customer-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+    gap: 1rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--color-text-transparent);
+}
+
+.view-inquiry .inquiry-row .inquiry-column,
+.view-dealer .dealer-row .dealer-column,
+.view-customer .customer-row .customer-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1rem;
+}
+
+.view-inquiry .inquiry-row .inquiry-column h4,
+.view-dealer .dealer-row .dealer-column h4,
+.view-customer .customer-row .customer-column h4 {
+    font-weight: 500;
+}
+
+.view-inquiry .inquiry-row .inquiry-column .inquiry-data,
+.view-dealer .dealer-row .dealer-column .dealer-data,
+.view-customer .customer-row .customer-column .customer-data {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.5rem;
+}
+
+.view-inquiry .inquiry-row .inquiry-column .inquiry-details,
+.view-dealer .dealer-row .dealer-column .dealer-details,
+.view-customer .customer-row .customer-column .customer-details {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+}
+
+.loan-schedule-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.schedule-summary {
+    display: flex;
+    gap: 1rem;
+}
+
+.summary-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-light);
+}
+
+.installment-schedule {
+    border: 1px solid var(--color-text-transparent);
+    border-radius: var(--border-radius);
+    padding: 0.5rem;
+}
+
+.inquiry-data {
+    width: 100%;
+}
+
+.loan-details {
+    width: 100%;
+    padding: 1rem;
+    border-bottom: 1px solid var(--color-text-transparent);
+}
+
+.loan-details:last-child {
+    border-bottom: none;
+}
+
+.installment-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 1rem;
+}
+
+.installment-icon {
+    color: var(--color-text-light);
+}
+
+.installment-info {
+    flex: 1;
+}
+
+.installment-date {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.overdue-tag {
+    background-color: var(--color-danger-transparent);
+    color: var(--color-danger);
+    padding: 2px 8px;
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-xs);
+}
+
+.installment-amount {
+    color: var(--color-text);
+    margin-top: 0.25rem;
+}
+
+.status-select {
+    padding: 0.5rem;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--color-text-transparent);
+    background-color: var(--color-background);
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.status-paid {
+    background-color: var(--color-success-transparent);
+    color: var(--color-success);
+    border-color: var(--color-success);
+}
+
+.status-pending {
+    background-color: var(--color-warning-transparent);
+    color: var(--color-warning);
+    border-color: var(--color-warning);
+}
+
+.paid-installment {
+    background-color: var(--color-success-transparent);
+}
+
+.payment-form {
+    width: 100%;
+}
+
+.payment-form .form-group {
+    margin-bottom: 10px;
+}
+
+.payment-tag {
+    font-size: 0.8em;
+    padding: 2px 8px;
+    background-color: var(--color-background-secondary);
+    border-radius: 4px;
+    margin-left: 8px;
+}
+
+.view-inquiry .inquiry-row .inquiry-column .inquiry-details p,
+.view-dealer .dealer-row .dealer-column .dealer-details p,
+.view-customer .customer-row .customer-column .customer-details p {
+    color: var(--color-text);
+}
+
+.view-inquiry .inquiry-row .inquiry-column .inquiry-details svg,
+.view-dealer .dealer-row .dealer-column .dealer-details svg,
+.view-customer .customer-row .customer-column .customer-details svg {
+    color: var(--color-text-light);
+    width: 20px;
+    height: 20px;
+}
+
+.view-inquiry .inquiry-column.addtional-notes,
+.view-dealer .dealer-column.addtional-notes {
+    padding-block: 1rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    border-bottom: 1px solid var(--color-text-transparent);
+}
+
+.view-inquiry .inquiry-actions,
+.view-dealer .dealer-actions,
+.view-customer .customer-actions {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 1rem;
+    width: 100%;
+    padding-block: 1rem;
+}
+
+.view-inquiry .btn,
+.view-dealer .btn,
+.view-customer .btn {
+    gap: .5rem;
+}
+
+/* ===============================
+   View Dealer Page
+   =============================== */
+.view-dealer .dealer-performance-card {
+    display: flex;
+    width: 100%;
+    border-radius: var(--border-radius);
+    background-color: var(--color-background-secondary);
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.view-dealer .dealer-performance-card .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 1rem;
+}
+
+.view-dealer .dealer-performance-card .card-header h5 {
+    font-weight: 500;
+    color: var(--color-text-light);
+}
+
+.view-dealer .dealer-performance-card .progress-bar {
+    width: 100%;
+    height: 10px;
+    border-radius: var(--border-radius);
+    background-color: var(--color-background);
+    position: relative;
+    overflow: hidden;
+}
+
+.view-dealer .dealer-performance-card .progress-bar .progress {
+    width: 50%;
+    height: 100%;
+    border-radius: var(--border-radius);
+    background-color: var(--color-primary);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.view-dealer .dealer-performance-card p {
+    color: var(--color-text-light);
+    font-size: var(--font-size-sm);
+}
+
+/* ===================================
+   View Car Details Page
+  =================================== */
+.car-images {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    background-color: var(--color-background);
+    width: 100%;
+}
+
+.car-images .main-image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+}
+
+.car-images .additional-images,
+.additional-images-preview {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+.car-images .additional-images img,
+.additional-images-preview img {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+}
+
+.car-details {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+}
+
+.car-details .main-details,
+.car-details .additional-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1rem;
+    flex: 3;
+}
+
+.car-details .additional-details {
+    flex: 1;
+}
+
+.car-details .car-details-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    background-color: var(--color-background);
+}
+
+.car-details .detail {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    gap: 5px;
+}
+
+.car-details .detail span {
+    color: var(--color-text-light);
+    font-size: var(--font-size-sm);
+}
+
+.car-details .detail p {
+    color: var(--color-text);
+    font-size: var(--font-size-md);
+}
+
+/* Main Details */
+.car-details .main-details .vehicle-details .details,
+.car-details .car-details-card .details,
+.car-details .main-details .features-specifications .specifications {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    row-gap: 1rem;
+}
+
+.car-details .main-details .features-specifications .specifications .specification {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: .5rem;
+}
+
+.car-details .main-details .features-specifications .specifications .specification svg {
+    color: var(--color-success);
+    width: 15px;
+    height: 15px;
+    margin-bottom: -5px;
+}
+
+.car-details .main-details .features-specifications .specifications .specification p {
+    color: var(--color-text);
+}
+
+/* Additional Details */
+.car-details .additional-details .pricing-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1rem;
+    width: 100%;
+}
+
+.car-details .additional-details .pricing-details .btn {
+    width: 100%;
+}
+
+.car-details .additional-details .pricing-details .price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.car-details .additional-details .pricing-details .price .status {
+    margin-bottom: .5rem;
+}
+
+.car-details .price-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1rem;
+}
+
+.car-details .extra-charges {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1rem;
+    width: 100%;
+}
+
+.car-details .extra-charges .charges-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1rem;
+    width: 100%;
+}
+
+.car-details .extra-charges .charges-list .charge {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.car-details .extra-charges .charges-list .charge p {
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+}
+
+.car-details .extra-charges .charges-list .charge svg {
+    width: 15px;
+    height: 15px;
+}
+
+.car-details .additional-details .pricing-details .price p {
+    color: var(--color-text-light);
+}
+
+.car-details .additional-details .key-specification-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1rem;
+}
+
+.car-details .additional-details .features-specifications {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1rem;
+    background-color: var(--color-background);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+}
+
+.car-details .additional-details .features-specifications .specifications {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1rem;
+}
+
+.car-details .additional-details .features-specifications .specifications .specification {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: .5rem;
+}
+
+.car-details .additional-details .features-specifications .specifications .specification svg {
+    color: var(--color-success);
+    width: 15px;
+    height: 15px;
+    margin-bottom: -5px;
+}
+
+.car-details .additional-details .action-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.car-details .additional-details .action-buttons .btn {
+    flex: 1;
+}
+
+/* ===============================
+   RTO Forms Page
+   =============================== */
+.view-rto-forms {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    background-color: var(--color-background);
+}
+
+.view-rto-forms .rto-forms {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.view-rto-forms .rto-forms .rto-form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    width: 100%;
+    border-bottom: 1px solid var(--color-text-transparent);
+}
+
+.view-rto-forms .rto-forms .rto-form .rto-form-title {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+}
+
+.view-rto-forms .rto-forms .rto-form .rto-form-title h5 {
+    font-weight: 500;
+}
+
+.view-rto-forms .rto-forms .rto-form .rto-form-title svg {
+    color: var(--color-text-light);
+    width: 20px;
+    height: 20px;
+}
+
+.view-rto-forms .rto-forms .rto-form .rto-form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+/* Settings Page */
+.settings-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    background-color: var(--color-background);
+}

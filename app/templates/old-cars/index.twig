@@ -1,0 +1,193 @@
+{% extends 'layouts/app.twig' %} {% block title %}
+    Old Cars
+{% endblock %}
+{% block content %}
+    {% set carsTable = {
+        title: 'Old Cars',
+        actions: [
+            {
+                type: 'select',
+                name: 'status',
+                options: [
+                    {
+                        value: 'All',
+                        label: 'All',
+                        selected: true
+                    },
+                    {
+                        value: 'sold',
+                        label: 'Sold',
+                        selected: false
+                    },
+                    {
+                        value: 'unsold',
+                        label: 'Unsold',
+                        selected: false
+                    }
+                ],
+                class: 'form-select'
+            },
+            {
+                type: 'search',
+                name: 'search',
+                placeholder: 'Search Cars',
+                class: 'form-control'
+            }
+        ],
+        columns: [
+            {
+                label: 'Car ID',
+                key: 'id'
+            },
+            {
+                label: 'Manufacturer',
+                key: 'manufacturer'
+            },
+            {
+                label: 'Model',
+                key: 'car_model'
+            },
+            {
+                label: 'Status',
+                key: 'status',
+                type: 'status'
+            },
+            {
+                label: 'Actions',
+                key: 'actions',
+                type: 'actions'
+            }
+        ],
+        data: []
+    } %}
+
+    {% for car in cars %}
+        {% set carData = {
+            id: '#CAR - ' ~ car.id,
+            manufacturer: car.manufacturer_name,
+            car_model: car.model_name,
+            status: {
+                type: car.status == 'sold' ? 'success' : 'danger',
+                value: car.status
+            },
+            actions: [
+                {
+                    type: 'button',
+                    class: 'icon-btn success',
+                    icon: 'user',
+                    modal_id: 'old-car-customer-details-modal-' ~ car.id
+                },
+                car.status == 'unsold'
+                    ? {
+                        type: 'link',
+                        href: url_for('sales.create') ~ '?car_type=old&car_id='
+                            ~ car.id,
+                        class: 'icon-btn accent',
+                        icon: 'file-plus-2'
+                    }
+                    : null,
+                {
+                    type: 'link',
+                    href: url_for(
+                        'old-cars.view',
+                        {
+                            id: car.id
+                        }
+                    ),
+                    class: 'icon-btn primary',
+                    icon: 'eye'
+                },
+                {
+                    type: 'link',
+                    href: url_for(
+                        'old-cars.edit',
+                        {
+                            id: car.id
+                        }
+                    ),
+                    class: 'icon-btn success',
+                    icon: 'square-pen'
+                },
+                {
+                    type: 'button',
+                    class: 'icon-btn danger',
+                    icon: 'trash',
+                    modal_id: 'delete-car-modal-' ~ car.id
+                }
+            ]
+        } %}
+        {% set carsTable =
+            carsTable|merge({
+                data: carsTable.data|merge([carData])
+            })
+        %}
+    {% endfor %}
+
+    <div class="page">
+        {% include 'common/header.twig' with {
+            title: 'Old Cars',
+            button: false
+        } %}
+        <div class="page-content">
+            {% for car in cars %}
+                {% include 'components/modal.twig' with {
+                    id: 'delete-car-modal-' ~ car.id,
+                    title: 'Delete this Car?',
+                    description: 'This Action Cannot be Undone!',
+                    modal_type: 'danger',
+                    modal_icon: 'circle-x',
+                    action_btn_type: 'btn-danger',
+                    action_btn_text: 'Proceed',
+                    action_btn_url: url_for(
+                        'old-cars.destroy',
+                        {
+                            id: car.id
+                        }
+                    )
+                } %}
+
+                {% include 'components/breakdown-modal.twig' with {
+                    id: 'old-car-customer-details-modal-' ~ car.id,
+                    title: 'Customer Details - Car #CAR-' ~ car.id,
+                    content: include(
+                        'old-cars/_customer-details.twig',
+                        {
+                            selected_car: car
+                        }
+                    )
+                } %}
+            {% endfor %}
+            <div class="stat-cards">
+                {% include 'components/stat-card.twig' with {
+                    title: 'Total Cars',
+                    icon_class: 'primary',
+                    icon: 'car',
+                    value: total_cars_this_month,
+                    footer_class: difference_status,
+                    data: old_cars_this_month ?? 'No Data Available'
+                } %}
+                {% include 'components/stat-card.twig' with {
+                    title: 'Sold',
+                    icon_class: 'success',
+                    icon: 'dollar-sign',
+                    value: sold_cars_this_month,
+                    footer_class: 'text',
+                    data: sold_cars_percentage ~ '% of Total Cars'
+                } %}
+                {% include 'components/stat-card.twig' with {
+                    title: 'Unsold',
+                    icon_class: 'danger',
+                    icon: 'tag',
+                    value: unsold_cars_this_month,
+                    footer_class: 'text',
+                    data: unsold_cars_percentage ~ '% of Total Cars'
+                } %}
+            </div>
+            {% include 'components/table.twig' with {
+                table: carsTable
+            } %}
+        </div>
+    </div>
+
+    <script src="/js/modal.js"></script>
+{% endblock %}

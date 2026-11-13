@@ -1,0 +1,436 @@
+{% extends 'layouts/app.twig' %}
+
+{% block title %}
+    {{ car.manufacturer_name }} {{ car.model_name }}
+{% endblock %}
+
+{% block content %}
+    <div class="page">
+        {% include 'common/header.twig' with {
+            title: car.manufacturer_name ~ ' ' ~ car.model_name,
+            button: true,
+            button_url: url_for(
+                'old-cars.edit',
+                {
+                    id: car.id
+                }
+            ),
+            button_text: 'Edit Car',
+            button_icon: 'square-pen',
+            back_button: true,
+            back_url: url_for('old-cars.index')
+        } %}
+        <div class="page-content">
+            {% if car.main_image or (car.additional_image|length) > 0 %}
+                <div class="car-images">
+                    {% if car.main_image %}
+                        <img
+                            src="/uploads/old-cars/{{ car.main_image }}"
+                            alt="Main Image"
+                            class="main-image"
+                        />
+                    {% endif %}
+                    {% if (car.additional_images|length) > 0 %}
+                        <div class="additional-images">
+                            {% for image in car.additional_images %}
+                                <img
+                                    src="/uploads/old-cars/{{ image.image_url }}"
+                                    alt="Additional Image"
+                                />
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            <div class="car-details">
+                <div class="main-details">
+                    <div class="car-details-card basic-information">
+                        <h4>Basic Information</h4>
+                        <div class="details">
+                            <div class="detail">
+                                <span>Docket Number</span>
+                                <p>
+                                    {{ car.docket_number }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="details">
+                            <div class="detail">
+                                <span>Booking Date</span>
+                                <p>
+                                    {{ car.booking_date|date('d F Y') }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Delivery Date</span>
+                                <p>
+                                    {{ car.delivery_date|date('d F Y') }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="car-details-card customer-details">
+                        <h4>Customer Details</h4>
+                        <div class="details">
+                            <div class="detail">
+                                <span>Name</span>
+                                <p>
+                                    {{ car.customer_name }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Phone</span>
+                                <p>
+                                    {{ car.customer_phone }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Email</span>
+                                <p>
+                                    {{ car.email }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Address</span>
+                                <p>
+                                    {{ car.customer_address1 }} <br />
+                                    {{ car.customer_address2 }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>City</span>
+                                <p>
+                                    {{ car.city_name }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Pincode</span>
+                                <p>
+                                    {{ car.pincode }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="car-details-card vehicle-details">
+                        <h4>Vehicle Details</h4>
+                        <div class="details">
+                            <div class="detail">
+                                <span>Manufacturer</span>
+                                <p>
+                                    {{ car.manufacturer_name }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Model</span>
+                                <p>
+                                    {{ car.model_name }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Color</span>
+                                <p>
+                                    {{ car.color }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Manufacture Year</span>
+                                <p>
+                                    {{ car.manufacture_year }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Fuel Type</span>
+                                <p>
+                                    {{ car.fuel_type }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Registration No</span>
+                                <p>
+                                    {{ car.registration_no }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Chassis No</span>
+                                <p>
+                                    {{ car.chassis_no }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Engine No</span>
+                                <p>
+                                    {{ car.engine_no }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Insurnace Expiry Date</span>
+                                <p>
+                                    {{ car.insurance_expiry_date }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="car-details-card additional-information">
+                        <h4>Additional Details</h4>
+                        <div class="details">
+                            <div class="detail">
+                                <span>Dealer</span>
+                                <p>
+                                    {{ car.dealer_name }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Location</span>
+                                <p>
+                                    {{ car.location }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Hire Purchase</span>
+                                <p>
+                                    {{ car.hp_name|capitalize }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Executive Branch</span>
+                                <p>
+                                    {{ car.executive_branch_name|capitalize }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Executive</span>
+                                <p>
+                                    {{ car.executive_name|capitalize }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Insurance Company</span>
+                                <p>
+                                    {{ car.insurance_company_name|capitalize }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>RTO</span>
+                                <p>
+                                    {{ car.rto_name|capitalize }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>RTO Code</span>
+                                <p>
+                                    {{ car.rto_code|upper }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Parsing Status</span>
+                                <p>
+                                    {{ car.parsing_status|capitalize }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Number Plate Type</span>
+                                <p>
+                                    {{ car.number_plate|capitalize }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Scheme</span>
+                                <p>
+                                    {{ car.scheme|capitalize }}
+                                </p>
+                            </div>
+                            <div class="detail">
+                                <span>Broker Name</span>
+                                <p>
+                                    {{ car.broker_name }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="additional-details">
+                    <div class="car-details-card pricing-details">
+                        <div class="price">
+                            {% if car.status == 'unsold' %}
+                                <div class="status danger">
+                                    {{ car.status }}
+                                </div>
+                            {% else %}
+                                <div class="status success">
+                                    {{ car.status }}
+                                </div>
+                            {% endif %}
+                            <div class="price-details">
+                                <div class="price">
+                                    <h2>
+                                        <i data-lucide="indian-rupee"></i>
+                                        {{ car.current_price|indian_format }}
+                                    </h2>
+                                    <p>
+                                        Current Price
+                                    </p>
+                                </div>
+                                <div class="price">
+                                    <h3>
+                                        <i data-lucide="indian-rupee"></i>
+                                        {{ car.original_price|indian_format }}
+                                    </h3>
+                                    <p>
+                                        Original Price
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="extra-charges">
+                            <h4>Extra Charges</h4>
+                            <div class="charges-list">
+                                {% for charge in car.extra_charges %}
+                                    <div class="charge">
+                                        <span>{{ charge.description }}</span>
+                                        <p>
+                                            <i data-lucide="indian-rupee"></i>{{ charge.amount|indian_format }}
+                                        </p>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {# Calculate Final Price #}
+                        {% set finalPrice = car.current_price %}
+                        {% for charge in car.extra_charges %}
+                            {% set finalPrice = finalPrice + charge.amount %}
+                        {% endfor %}
+
+                        <div class="final-price">
+                            <h4>Final Price</h4>
+                            <h2>
+                                <i data-lucide="indian-rupee"></i>
+                                {{ finalPrice|indian_format }}
+                            </h2>
+                        </div>
+                        {% if car.status == 'unsold' %}
+                            <a
+                                href="{{
+                                url_for(
+                                    'sales.create'
+                                )
+                                }}?car_type=old&car_id={{ car.id }}"
+                                class="btn btn-primary"
+                            >
+                                <i data-lucide="file-input"></i>
+                                Create Sale
+                            </a>
+                        {% endif %}
+                    </div>
+
+                    <div class="car-details-card documents">
+                        <h4>Vehicle Documents</h4>
+                        <div class="form-group">
+                            {% if car.rc_book is not same as(null) %}
+                                <div class="form-group row">
+                                    <i data-lucide="file-text"></i>
+                                    <a
+                                        href="/uploads/documents/{{ car.rc_book }}"
+                                        target="_blank"
+                                    >
+                                        RC Book
+                                    </a>
+                                </div>
+                            {% endif %}
+                            {% if car.insurance_doc is not same as(null) %}
+                                <div class="form-group row">
+                                    <i data-lucide="shield-check"></i>
+                                    <div class="form-group row">
+                                        <a
+                                            href="/uploads/documents/{{ car.insurance_doc}}"
+                                        >
+                                            Insurance
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if car.owner_id_proof is not same as(null) %}
+                                <div class="form-group row">
+                                    <i data-lucide="id-card"></i>
+                                    <div class="form-group row">
+                                        <a
+                                            href="/uploads/documents/{{ car.owner_id_proof}}"
+                                        >
+                                            Owner ID Proof
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if car.pan_card is not same as(null) %}
+                                <div class="form-group row">
+                                    <i data-lucide="credit-card"></i>
+                                    <div class="form-group row">
+                                        <a
+                                            href="/uploads/documents/{{ car.pan_card }}"
+                                        >
+                                            PAN Card
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if car.aadhar_card is not same as(null) %}
+                                <div class="form-group row">
+                                    <i data-lucide="contact"></i>
+                                    <div class="form-group row">
+                                        <a
+                                            href="/uploads/documents/{{ car.aadhar_card }}"
+                                        >
+                                            Aadhar Card
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if car.noc is not same as(null) %}
+                                <div class="form-group row">
+                                    <i data-lucide="stamp"></i>
+                                    <div class="form-group row">
+                                        <a
+                                            href="/uploads/documents/{{ car.noc }}"
+                                        >
+                                            NOC
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if car.form_35 is not same as(null) %}
+                                <div class="form-group row">
+                                    <i data-lucide="clipboard-list"></i>
+                                    <div class="form-group row">
+                                        <a
+                                            href="/uploads/documents/{{ car.form_35 }}"
+                                        >
+                                            Form 35
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if car.purchase_agreement is not same as(null) %}
+                                <div class="form-group row">
+                                    <i data-lucide="file-signature"></i>
+                                    <div class="form-group row">
+                                        <a
+                                            href="/uploads/documents/{{ car.purchase_agreement }}"
+                                        >
+                                            Purchase Agreement
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/modal.js"></script>
+{% endblock %}

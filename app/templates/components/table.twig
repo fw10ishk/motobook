@@ -1,0 +1,317 @@
+{# Enhanced Table Component #}
+<div class="table">
+    {# Table Header #}
+    <div class="table-header">
+        <h4>{{ table.title|default('Table') }}</h4>
+        {% if table.actions is defined and (table.actions|length) > 0 %}
+            <div class="table-actions">
+                <form id="filterForm" method="GET" class="filter-form">
+                    {% for action in table.actions %}
+                        {% if action.type == 'select' %}
+                            <select
+                                class="{{ action.class|default(
+                                    ''
+                                ) }} filter-select"
+                                name="{{ action.name|default('') }}"
+                                data-filter-type="status"
+                            >
+                                {% for option in action.options %}
+                                    <option
+                                        value="{{ option.value }}"
+                                        {{
+                                        option.value == current_status
+                                            ? 'selected'
+                                            : ''
+                                        }}
+                                    >
+                                        {{ option.label }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        {% elseif action.type == 'search' %}
+                            <div class="search-container form-group row">
+                                <input
+                                    type="text"
+                                    class="{{ action.class|default(
+                                        ''
+                                    ) }} filter-search"
+                                    placeholder="{{ action.placeholder|default(
+                                        'Search...'
+                                    ) }}"
+                                    name="{{ action.name|default('') }}"
+                                    value="{{ current_search }}"
+                                    data-filter-type="search"
+                                />
+                                <button type="submit" class="btn btn-primary">
+                                    Search
+                                </button>
+                            </div>
+                        {% elseif action.type == 'date' %}
+                            <div class="date-filter-container form-group row">
+                                <div class="form-group row">
+                                    <label for="date_from">From:</label>
+                                    <input
+                                        type="date"
+                                        id="date_from"
+                                        class="filter-date"
+                                        name="date_from"
+                                        value="{{ date_from }}"
+                                        data-filter-type="date-from"
+                                    />
+                                </div>
+                                <div class="form-group row">
+                                    <label for="date_to">To:</label>
+                                    <input
+                                        type="date"
+                                        id="date_to"
+                                        class="filter-date"
+                                        name="date_to"
+                                        value="{{ date_to }}"
+                                        data-filter-type="date-to"
+                                    />
+                                </div>
+                            </div>
+                        {% elseif action.type == 'link' %}
+                            <a
+                                href="{{ action.url }}"
+                                class="{{ action.class|default('') }}"
+                            >
+                                {{ action.value }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+
+                    <div class="button-group">
+                        {% if
+                            (current_search is not same as(null)
+                                and current_search != '')
+                                or (current_status is not same as(null)
+                                and current_status != 'All'
+                                    and current_status != '')
+                                or (date_from is not same as(null)
+                                    and date_from != '')
+                                or (date_to is not same as(null)
+                                    and date_to != '') %}
+                            <button id="resetFilters" class="btn btn-secondary">
+                                Reset Filters
+                            </button>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+
+    {# Table Header Row #}
+    <div class="table-row table-header-row">
+        {% for column in table.columns %}
+            <div class="table-data">
+                <p>
+                    {{ column.label }}
+                </p>
+            </div>
+        {% endfor %}
+    </div>
+
+    {# Table Body Rows #}
+    {% if (table.data|length) == 0 %}
+        <div class="table-row table-body-row">
+            <div class="table-data default">
+                <p>
+                    No data available
+                </p>
+            </div>
+        </div>
+    {% else %}
+        {% for row in table.data %}
+            <div class="table-row table-body-row">
+                {% for column in table.columns %}
+                    <div class="table-data">
+                        {% set value = attribute(row, column.key) %}
+
+                        {# Handle different column types #}
+                        {% if column.type is defined %}
+                            {% if column.type == 'currency' %}
+                                <p>
+                                    {% if column.icon is defined %}
+                                        <i data-lucide="{{ column.icon }}"></i>
+                                    {% endif %}
+                                    {{ value|number_format(0, '.', ',') }}
+                                </p>
+                            {% elseif column.type == 'status' %}
+                                <p
+                                    class="status {{ value.type|default('default') }}"
+                                >
+                                    {% if column.icon is defined %}
+                                        <i data-lucide="{{ column.icon }}"></i>
+                                    {% endif %}
+                                    {{ value.value }}
+                                </p>
+                            {% elseif column.type == 'date' %}
+                                <p>
+                                    {{
+                                        value|date(
+                                            column.format|default('d M Y')
+                                        )
+                                    }}
+                                </p>
+                            {% elseif column.type == 'link' %}
+                                <a
+                                    href="{{ value.href }}"
+                                    class="{{ value.class|default('') }}"
+                                >
+                                    {{ value.text }}
+                                </a>
+                            {% elseif column.type == 'actions' %}
+                                <div class="table-actions">
+                                    {% for action in value %}
+                                        {% if action.type == 'link' %}
+                                            <a
+                                                href="{{ action.href }}"
+                                                class="{{ action.class|default(
+                                                    ''
+                                                ) }}"
+                                            >
+                                                {% if action.icon is defined %}
+                                                    <i
+                                                        data-lucide="{{
+                                                        action.icon
+                                                        }}"
+                                                    >
+
+                                                    </i>
+                                                {% endif %}
+                                                {{ action.value }}
+                                            </a>
+                                        {% elseif action.type == 'button' %}
+                                            {% if action.print %}
+                                                <button
+                                                    class="{{ action.class }}"
+                                                    data-car-id="{{
+                                                    action.car_id
+                                                    }}"
+                                                >
+                                                    <i
+                                                        data-lucide="{{
+                                                        action.icon
+                                                        }}"
+                                                    >
+
+                                                    </i>
+                                                </button>
+                                            {% else %}
+                                                <button
+                                                    class="{{ action.class }}"
+                                                    data-modal-open="{{
+                                                    action.modal_id
+                                                    }}"
+                                                >
+                                                    <i
+                                                        data-lucide="{{
+                                                        action.icon
+                                                        }}"
+                                                    >
+
+                                                    </i>
+                                                </button>
+                                            {% endif %}
+                                        {% elseif action.type == 'select' %}
+                                            <select
+                                                class="{{ action.class|default(
+                                                    ''
+                                                ) }}"
+                                                name="{{ action.name|default(
+                                                    ''
+                                                ) }}"
+                                            >
+                                                {% for option in action.options %}
+                                                    <option
+                                                        value="{{
+                                                        option.value
+                                                        }}"
+                                                        {{
+                                                        option.selected is defined
+                                                            and option.selected
+                                                            ? 'selected'
+                                                            : ''
+                                                        }}
+                                                    >
+                                                        {{ option.label }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <p>
+                                    {{ value }}
+                                </p>
+                            {% endif %}
+                        {% else %}
+                            <p>
+                                {{ value }}
+                            </p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {# Pagination #}
+    {% if total_pages > 1 %}
+        <div class="pagination">
+            {% if current_page > 1 %}
+                <a
+                    href="?page=1&status={{ current_status }}&search={{ current_search }}"
+                    class="btn btn-outline pagination-link"
+                    data-page="1"
+                >
+                    &laquo; First
+                </a>
+                <a
+                    href="?page={{ current_page - 1 }}&status={{ current_status }}&search={{ current_search }}"
+                    class="btn btn-outline pagination-link"
+                    data-page="{{ current_page - 1 }}"
+                >
+                    Previous
+                </a>
+            {% endif %}
+
+            {% for i in range(
+                max(1, current_page - 2),
+                min(total_pages, current_page + 2)
+            ) %}
+                <a
+                    href="?page={{ i }}&status={{ current_status }}&search={{ current_search }}"
+                    class="btn {{ current_page == i ? 'btn-primary' : 'btn-outline' }} pagination-link"
+                    data-page="{{ i }}"
+                >
+                    {{ i }}
+                </a>
+            {% endfor %}
+
+            {% if current_page < total_pages %}
+                <a
+                    href="?page={{ current_page + 1 }}&status={{ current_status }}&search={{ current_search }}"
+                    class="btn btn-outline pagination-link"
+                    data-page="{{ current_page + 1 }}"
+                >
+                    Next
+                </a>
+                <a
+                    href="?page={{ total_pages }}&status={{ current_status }}&search={{ current_search }}"
+                    class="btn btn-outline pagination-link"
+                    data-page="{{ total_pages }}"
+                >
+                    Last &raquo;
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+
+{% block scripts %}
+    <script src="/js/table-filters.js"></script>
+{% endblock %}

@@ -1,0 +1,39 @@
+@media print {
+    body {
+        font-size: 12pt;
+    }
+
+    h1 {
+        font-size: 18pt;
+    }
+
+    h2 {
+        font-size: 16pt;
+    }
+
+    h3,
+    h4 {
+        font-size: 14pt;
+    }
+
+    .print-only-header {
+        display: block !important;
+        margin-bottom: 20px;
+    }
+
+    .page-content {
+        width: 100% !important;
+    }
+
+    .inquiry-row,
+    .installment-schedule {
+        page-break-inside: avoid;
+    }
+
+    .inquiry-actions,
+    .status-form,
+    .payment-form,
+    .btn {
+        display: none !important;
+    }
+}

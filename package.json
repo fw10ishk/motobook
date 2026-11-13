@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "@zackad/prettier-plugin-twig": "^0.14.0"
+  }
+}

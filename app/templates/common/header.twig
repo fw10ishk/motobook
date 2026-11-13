@@ -1,0 +1,32 @@
+<nav>
+    <div class="page-title">
+        {% if back_button %}
+            <a href="{{ back_url }}"><i data-lucide="arrow-left"></i></a>
+        {% endif %}
+        <h3>{{ title }}</h3>
+    </div>
+    {% if button %}
+        <a href="{{ button_url }}" class="btn btn-primary">
+            <i data-lucide="{{ button_icon }}"></i>
+            {{ button_text }}
+        </a>
+    {% else %}
+        <div class="calendar">
+            <i data-lucide="calendar"></i>
+            <p>
+                {% set day = 'now'|date('j') %}
+                {% set suffix = 'th' %}
+
+                {% if day in [1, 21, 31] %}
+                    {% set suffix = 'st' %}
+                {% elseif day in [2, 22] %}
+                    {% set suffix = 'nd' %}
+                {% elseif day in [3, 23] %}
+                    {% set suffix = 'rd' %}
+                {% endif %}
+
+                {{ day ~ suffix ~ ' ' ~ ('now'|date('M Y')) }}
+            </p>
+        </div>
+    {% endif %}
+</nav>

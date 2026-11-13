@@ -1,0 +1,100 @@
+{% extends 'layouts/app.twig' %}
+
+{% block title %}
+    Edit User
+{% endblock %}
+
+{% block content %}
+    <div class="page">
+        {% include 'common/header.twig' with {
+            title: 'Edit User',
+            button: false,
+            back_button: true,
+            back_url: url_for('users.index')
+        } %}
+        <div class="page-content">
+            <form
+                class="settings-form"
+                action="{{
+                url_for(
+                    'users.update',
+                    {
+                        id: user.id
+                    }
+                )
+                }}"
+                method="POST"
+            >
+                <input type="hidden" name="_METHOD" value="PUT" />
+                <div class="form-group">
+                    <label for="full_name">Full Name*</label>
+                    <input
+                        type="text"
+                        name="full_name"
+                        id="full_name"
+                        placeholder="Enter your full name"
+                        value="{{ user.full_name }}"
+                        required
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="email">Email*</label>
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        placeholder="Enter your email"
+                        value="{{ user.email }}"
+                        required
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        placeholder="Enter New password"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="role">Role*</label>
+                    <select name="role" id="role">
+                        {% if user.role == 'admin' %}
+                            <option value="admin" selected>
+                                Admin
+                            </option>
+                        {% else %}
+                            <option value="admin">
+                                Admin
+                            </option>
+                        {% endif %}
+                        {% if user.role == 'user' %}
+                            <option value="user" selected>
+                                User
+                            </option>
+                        {% else %}
+                            <option value="user">
+                                User
+                            </option>
+                        {% endif %}
+                    </select>
+                </div>
+                <div class="form-group row">
+                    {% if user.status == 'active' %}
+                        <input
+                            type="checkbox"
+                            name="status"
+                            id="status"
+                            checked
+                        />
+                    {% else %}
+                        <input type="checkbox" name="status" id="status" />
+                    {% endif %}
+                    <label for="status" class="checkbox-label">Is Active</label>
+                </div>
+                <input type="submit" value="Update" class="btn btn-primary" />
+            </form>
+        </div>
+    </div>
+{% endblock %}

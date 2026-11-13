@@ -1,0 +1,343 @@
+{% extends 'layouts/app.twig' %} {% block title %}
+    New Cars
+{% endblock %}
+{% block content %}
+    {% set carsTable = {
+        title: 'New Cars',
+        actions: [
+            {
+                type: 'select',
+                name: 'status',
+                options: [
+                    {
+                        value: 'All',
+                        label: 'All',
+                        selected: true
+                    },
+                    {
+                        value: 'sold',
+                        label: 'Sold',
+                        selected: false
+                    },
+                    {
+                        value: 'unsold',
+                        label: 'Unsold',
+                        selected: false
+                    }
+                ],
+                class: 'form-select'
+            },
+            {
+                type: 'search',
+                name: 'search',
+                placeholder: 'Search Cars',
+                class: 'form-control'
+            }
+        ],
+        columns: [
+            {
+                label: 'Car ID',
+                key: 'id'
+            },
+            {
+                label: 'Car',
+                key: 'car'
+            },
+            {
+                label: 'Customer',
+                key: 'customer'
+            },
+            {
+                label: 'Contact',
+                key: 'contact'
+            },
+            {
+                label: 'Booking Date',
+                key: 'booking_date'
+            },
+            {
+                label: 'Status',
+                key: 'status',
+                type: 'status'
+            },
+            {
+                label: 'Actions',
+                key: 'actions',
+                type: 'actions'
+            }
+        ],
+        data: []
+    } %}
+
+    {% for car in cars %}
+        {% set carData = {
+            id: '#CAR - ' ~ car.id,
+            car: car.manufacturer_name ~ ' ' ~ car.model_name,
+            customer: car.customer_name,
+            contact: car.customer_phone,
+            booking_date: car.booking_date|date('d/m/Y'),
+            status: {
+                type: car.status == 'sold' ? 'success' : 'danger',
+                value: car.status
+            },
+            actions: [
+                {
+                    type: 'button',
+                    class: 'icon-btn success',
+                    icon: 'user',
+                    modal_id: 'new-car-customer-details-modal-' ~ car.id
+                },
+                session.user.role == 'admin'
+                    ? {
+                        type: 'button',
+                        class: 'icon-btn accent',
+                        icon: 'user-cog',
+                        modal_id: 'new-car-dealer-details-modal-' ~ car.id
+                    },
+                {
+                    type: 'button',
+                    class: 'icon-btn warning print-button',
+                    icon: 'printer',
+                    print: true,
+                    car_id: car.id
+                },
+                {
+                    type: 'link',
+                    href: url_for(
+                        'new-cars.view',
+                        {
+                            id: car.id
+                        }
+                    ),
+                    class: 'icon-btn primary',
+                    icon: 'eye'
+                },
+                {
+                    type: 'link',
+                    href: url_for(
+                        'new-cars.edit',
+                        {
+                            id: car.id
+                        }
+                    ),
+                    class: 'icon-btn success',
+                    icon: 'square-pen'
+                },
+                {
+                    type: 'button',
+                    class: 'icon-btn danger',
+                    icon: 'trash',
+                    modal_id: 'delete-car-modal-' ~ car.id
+                }
+            ]
+        } %}
+        {% set carsTable =
+            carsTable|merge({
+                data: carsTable.data|merge([carData])
+            })
+        %}
+    {% endfor %}
+
+    <div class="page">
+        {% include 'common/header.twig' with {
+            title: 'New Cars',
+            button: false
+        } %}
+        <div class="page-content">
+            {% for car in cars %}
+                {% include 'components/modal.twig' with {
+                    id: 'delete-car-modal-' ~ car.id,
+                    title: 'Delete this Car?',
+                    description: 'This Action Cannot be Undone!',
+                    modal_type: 'danger',
+                    modal_icon: 'circle-x',
+                    action_btn_type: 'btn-danger',
+                    action_btn_text: 'Proceed',
+                    action_btn_url: url_for(
+                        'new-cars.destroy',
+                        {
+                            id: car.id
+                        }
+                    )
+                } %}
+
+                {% include 'components/breakdown-modal.twig' with {
+                    id: 'new-car-customer-details-modal-' ~ car.id,
+                    title: 'Customer Details - Car #CAR-' ~ car.id,
+                    content: include(
+                        'new-cars/_customer-details.twig',
+                        {
+                            selected_car: car
+                        }
+                    )
+                } %}
+
+                {# Dealer Price Modal #}
+                {% include 'components/breakdown-modal.twig' with {
+                    id: 'new-car-dealer-details-modal-' ~ car.id,
+                    title: 'Dealer Details - Car #CAR-' ~ car.id,
+                    content: include(
+                        'new-cars/_dealer-details.twig',
+                        {
+                            selected_car: car
+                        }
+                    )
+                } %}
+            {% endfor %}
+            <div class="stat-cards">
+                {% include 'components/stat-card.twig' with {
+                    title: 'Total Cars',
+                    icon_class: 'primary',
+                    icon: 'car',
+                    value: total_cars_this_month,
+                    footer_class: difference_status,
+                    data: new_cars_this_month ?? 'No Data Available'
+                } %}
+                {% include 'components/stat-card.twig' with {
+                    title: 'Sold',
+                    icon_class: 'success',
+                    icon: 'dollar-sign',
+                    value: sold_cars_this_month,
+                    footer_class: 'text',
+                    data: sold_cars_percentage ~ '% of Total Cars'
+                } %}
+                {% include 'components/stat-card.twig' with {
+                    title: 'Unsold',
+                    icon_class: 'danger',
+                    icon: 'tag',
+                    value: unsold_cars_this_month,
+                    footer_class: 'text',
+                    data: unsold_cars_percentage ~ '% of Total Cars'
+                } %}
+            </div>
+            {% include 'components/table.twig' with {
+                table: carsTable
+            } %}
+        </div>
+    </div>
+
+    <div id="print-template">
+        <div class="header">
+            <div class="company-name">
+                Parivar Motors
+            </div>
+            <div class="company-details">
+                Balasinor Rd, Near Juni Gokul Dairy, Chowkdi, Pithai, Kathlal,
+                Gujarat 387630
+            </div>
+            <div class="company-details">
+                +91 96622 25909 | +91 99098 00206
+            </div>
+            <div class="company-details">
+                tahir3mansuri@gmail.com
+            </div>
+        </div>
+
+        <div id="print-content"></div>
+    </div>
+
+    <!-- prettier-ignore -->
+    <style>
+        @media print {
+            /* First, hide everything */
+            body {
+                margin: 0;
+                padding: 0;
+                visibility: hidden;
+            }
+
+            /* Then show only the print template and its contents */
+            #print-template {
+                display: block !important;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                visibility: visible;
+                padding-top: 0;
+            }
+
+            #print-template * {
+                visibility: visible;
+            }
+
+            /* Additional print-specific styles */
+            .header {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: .5rem;
+                text-align: center;
+                margin-bottom: 20px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #000;
+            }
+
+            .subject {
+                margin-top: 20px;
+            }
+
+            .company-name {
+                font-size: 18px;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+
+            .company-details {
+                font-size: 14px;
+                margin-bottom: 3px;
+            }
+
+            .document-info {
+                margin: 20px 0;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .vehicle-details, 
+            .customer-details {
+                margin: 15px 0;
+                line-height: 1.6;
+            }
+
+            h6 {
+                font-size: 18px !important;
+            }
+
+            .vehicle-details p,
+            .customer-details p {
+                font-size: 16px;
+            }
+
+            .customer-details {
+                display: flex;
+                flex-direction: column;
+                gap: .5rem;
+            }
+
+            .vehicle-details .detail {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 5px;
+            }
+
+            .footer {
+                margin-top: 20px;
+            }
+
+            .signature {
+                margin-top: 10px;
+            }
+
+            /* Ensure page breaks are handled appropriately */
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+
+    <script src="/js/modal.js"></script>
+    <script src="/js/print-deal-order.js"></script>
+{% endblock %}

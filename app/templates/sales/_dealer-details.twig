@@ -1,0 +1,429 @@
+<div class="view-inquiry sale-modal">
+    {% if sale.sale_type == 'full' %}
+        <div class="inquiry-row">
+            <div class="inquiry-column">
+                <div class="loan-schedule-header">
+                    <h4>Dealer Payment History</h4>
+                    <div class="schedule-summary">
+                        <span class="status success">
+                            <i data-lucide="banknote"></i>
+                            ₹{{
+                                sale.dealer_full_payment.amount_paid|number_format
+                            }} Paid
+                        </span>
+                        <span class="status warning">
+                            <i data-lucide="circle-dollar-sign"></i>
+                            ₹{{
+                                sale.dealer_full_payment.remaining_amount|number_format
+                            }} Remaining
+                        </span>
+                    </div>
+                </div>
+                <div class="add-installment">
+                    <h4>Add Payment</h4>
+                    <form
+                        method="POST"
+                        action="{{
+                        url_for(
+                            'sales.record-dealer-full-payment',
+                            {
+                                id: sale.dealer_full_payment.id,
+                                sale_id: sale.id
+                            }
+                        )
+                        }}"
+                        class="payment-form"
+                    >
+                        <input type="hidden" name="_METHOD" value="PUT" />
+                        <div class="form-group row">
+                            <input
+                                type="text"
+                                name="note"
+                                id="note"
+                                placeholder="Dealer Receipt"
+                                class="form-control"
+                            />
+                            <input
+                                type="number"
+                                name="amount"
+                                placeholder="Enter amount"
+                                step="0.01"
+                                max="{{
+                                sale.dealer_full_payment.remaining_amount
+                                }}"
+                                required
+                                class="form-control"
+                            />
+                            <select
+                                name="payment_method"
+                                required
+                                class="form-control"
+                            >
+                                <option value="cash">
+                                    Cash
+                                </option>
+                                <option value="check">
+                                    Check
+                                </option>
+                                <option value="online">
+                                    Online
+                                </option>
+                                <option value="bank">
+                                    Bank
+                                </option>
+                            </select>
+                            <input
+                                type="date"
+                                name="payment_date"
+                                value="{{ 'now'|date('Y-m-d') }}"
+                                required
+                                class="form-control"
+                            />
+                            <input
+                                type="submit"
+                                class="btn btn-primary"
+                                value="Add Payment"
+                            />
+                        </div>
+                    </form>
+                </div>
+                <div class="inquiry-data">
+                    {% if (sale.dealer_full_payment.payments|length) > 0 %}
+                        <div class="payment-table-container">
+                            <table class="payment-table">
+                                <thead class="payment-table-header">
+                                    <tr class="blue-row">
+                                        <th>Dealer Receipt</th>
+                                        <th>Method</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                        {% if session.user.role == 'admin' %}
+                                            <th>Actions</th>
+                                        {% endif %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for payment in sale.dealer_full_payment.payments %}
+                                        {% if session.user.role == 'admin' %}
+                                            <form
+                                                action="{{
+                                                url_for(
+                                                    'sales.update-dealer-full-payment',
+                                                    {
+                                                        id: payment.id,
+                                                        payment_id: sale.dealer_full_payment.id
+                                                    }
+                                                )
+                                                }}"
+                                                method="POST"
+                                                class="payment-form"
+                                            >
+                                                <input
+                                                    type="hidden"
+                                                    name="_METHOD"
+                                                    value="PUT"
+                                                />
+                                                <tr>
+                                                    <td>
+                                                        <input
+                                                            type="text"
+                                                            name="note"
+                                                            id="note"
+                                                            placeholder="Dealer Receipt"
+                                                            class="form-control"
+                                                            value="{{
+                                                            payment.note
+                                                            }}"
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <select
+                                                            name="payment_method"
+                                                            id="payment_method"
+                                                        >
+                                                            {% for method in [
+                                                                'cash',
+                                                                'check',
+                                                                'online',
+                                                                'bank'
+                                                            ] %}
+                                                                {% if
+                                                                    method
+                                                                        == payment.payment_method %}
+                                                                    <option
+                                                                        value="{{
+                                                                        method
+                                                                        }}"
+                                                                        selected
+                                                                    >
+                                                                        {{
+                                                                            method|capitalize
+                                                                        }}
+                                                                    </option>
+                                                                {% else %}
+                                                                    <option
+                                                                        value="{{
+                                                                        method
+                                                                        }}"
+                                                                    >
+                                                                        {{
+                                                                            method|capitalize
+                                                                        }}
+                                                                    </option>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="number"
+                                                            name="amount"
+                                                            id="amount"
+                                                            placeholder="Amount"
+                                                            step="0.01"
+                                                            class="form-control"
+                                                            value="{{
+                                                            payment.amount
+                                                            }}"
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="date"
+                                                            name="payment_date"
+                                                            id="payment_date"
+                                                            value="{{ payment.payment_date|date(
+                                                                'Y-m-d'
+                                                            ) }}"
+                                                            class="form-control"
+                                                        />
+                                                    </td>
+                                                    <td class="action-btn">
+                                                        <button
+                                                            class="icon-btn primary"
+                                                            type="submit"
+                                                        >
+                                                            <i
+                                                                data-lucide="check"
+                                                            >
+
+                                                            </i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </form>
+                                        {% else %}
+                                            <tr>
+                                                <td>
+                                                    <input
+                                                        type="text"
+                                                        name="note"
+                                                        id="note"
+                                                        placeholder="Customer Receipt"
+                                                        class="form-control"
+                                                        value="{{
+                                                        payment.note
+                                                        }}"
+                                                        readonly
+                                                    />
+                                                </td>
+                                                <td>
+                                                    <input
+                                                        type="text"
+                                                        name="payment_method"
+                                                        id="payment_method"
+                                                        placeholder="Method"
+                                                        class="form-control"
+                                                        value="{{ payment.payment_method|capitalize }}"
+                                                        readonly
+                                                    />
+                                                </td>
+                                                <td>
+                                                    <input
+                                                        type="number"
+                                                        name="amount"
+                                                        id="amount"
+                                                        placeholder="Amount"
+                                                        step="0.01"
+                                                        class="form-control"
+                                                        value="{{
+                                                        payment.amount
+                                                        }}"
+                                                        readonly
+                                                    />
+                                                </td>
+                                                <td>
+                                                    <input
+                                                        type="date"
+                                                        name="payment_date"
+                                                        id="payment_date"
+                                                        value="{{ payment.payment_date|date(
+                                                            'Y-m-d'
+                                                        ) }}"
+                                                        class="form-control"
+                                                        readonly
+                                                    />
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="inquiry-row">
+        <div class="inquiry-column">
+            <h4>Vehicle Pricing Breakdown</h4>
+            {% if selected_car.ex_showroom_price is not same as(null) %}
+                <table>
+                    <thead>
+                        <tr>
+                            <td>Particulars</td>
+                            <td>Dealer Price</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Ex-Showroom Price</td>
+                            <td>
+                                ₹{{ selected_car.dealer_ex_showroom_price|number_format }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>RTO Tax</td>
+                            <td>
+                                ₹{{ selected_car.dealer_rto_tax|number_format }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Insurance</td>
+                            <td>
+                                ₹{{ selected_car.dealer_insurance|number_format }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>AMC/GMC Tax</td>
+                            <td>
+                                ₹{{ selected_car.dealer_amc_gmc_tax|number_format }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Extended Warranty</td>
+                            <td>
+                                ₹{{ selected_car.dealer_ext_warranty|number_format }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Accessories</td>
+                            <td>
+                                ₹{{ selected_car.dealer_accessories|number_format }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Parivar Accessories</td>
+                            <td>
+                                ₹{{ selected_car.dealer_krunal_accessories|number_format }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Fast Tag</td>
+                            <td>
+                                ₹{{ selected_car.dealer_fast_tag|number_format }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>TCS</td>
+                            <td>
+                                ₹{{ selected_car.dealer_tcs|number_format }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Loyalty Card</td>
+                            <td>
+                                ₹{{ selected_car.dealer_loyalty_card|number_format }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Driver Price</td>
+                            <td>
+                                ₹{{ selected_car.dealer_driver_price|number_format }}
+                            </td>
+                        </tr>
+                        <tr class="blue-row">
+                            <td>Total On-Road Price</td>
+                            <td>
+                                ₹{{ selected_car.dealer_total_on_road|number_format }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Consumer Offer</td>
+                            <td>
+                                {{ selected_car.dealer_consumer_offer > 0
+                                    ? '-₹'
+                                        ~ (selected_car.dealer_consumer_offer|number_format)
+                                    : '₹'
+                                        ~ (selected_car.dealer_consumer_offer|number_format) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Corporate Discount</td>
+                            <td>
+                                {{ selected_car.corporate_discount > 0
+                                    ? '-₹'
+                                        ~ (selected_car.dealer_corporate_discount|number_format)
+                                    : '₹'
+                                        ~ (selected_car.dealer_corporate_discount|number_format) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Other Discount</td>
+                            <td>
+                                {{ selected_car.dealer_other_discount > 0
+                                    ? '-₹'
+                                        ~ (selected_car.dealer_other_discount|number_format)
+                                    : '₹'
+                                        ~ (selected_car.dealer_other_discount|number_format) }}
+                            </td>
+                        </tr>
+                        <tr class="blue-row">
+                            <td>Net On-Road Price</td>
+                            <td>
+                                ₹{{ selected_car.dealer_net_on_road|number_format }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Disbursement</td>
+                            <td>
+                                {{ selected_car.dealer_disbursement > 0
+                                    ? '-₹'
+                                        ~ (selected_car.dealer_disbursement|number_format)
+                                    : '₹'
+                                        ~ (selected_car.dealer_disbursement|number_format) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Down Payment</td>
+                            <td>
+                                {{ selected_car.dealer_down_payment > 0
+                                    ? '-₹'
+                                        ~ (selected_car.dealer_down_payment|number_format)
+                                    : '₹'
+                                        ~ (selected_car.dealer_down_payment|number_format) }}
+                            </td>
+                        </tr>
+                        <tr class="blue-row">
+                            <td>Net Short Payment</td>
+                            <td>
+                                ₹{{ selected_car.dealer_net_short_payment|number_format }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+</div>

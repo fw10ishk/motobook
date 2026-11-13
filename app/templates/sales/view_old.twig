@@ -1,0 +1,1162 @@
+{% extends 'layouts/app.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/css/print-sale.css" media="print" />
+{% endblock %}
+
+{% block title %}
+    Sale Details
+{% endblock %}
+
+{% block content %}
+    <div class="page">
+        {% include 'common/header.twig' with {
+            title: 'Sale Details',
+            button: false,
+            button_url: '#',
+            button_text: 'Edit Sale',
+            button_icon: 'square-pen',
+            back_button: true,
+            back_url: url_for('sales.index')
+        } %}
+        <div class="page-content">
+            <div class="view-inquiry">
+                <div class="inquiry-header">
+                    <div class="inquiry-title">
+                        <h2>Sale #SAL-{{ sale.id }}</h2>
+                        <p>
+                            Sale Happened on {{ sale.sale_date|date('d M, Y') }}
+                        </p>
+                    </div>
+                    {% if sale.sale_type == 'full' %}
+                        <div class="status success">
+                            {{ sale.sale_type|capitalize }}
+                        </div>
+                    {% else %}
+                        <div class="status accent">
+                            {{ sale.sale_type|capitalize }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="inquiry-row">
+                    {% if sale.car_type == 'new' %}
+                        <div class="inquiry-column">
+                            <h4>Customer Information</h4>
+                            <div class="inquiry-data">
+                                <div class="inquiry-details">
+                                    <i data-lucide="user"></i>
+                                    <p>
+                                        {{ sale.buyer_name }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="phone"></i>
+                                    <p>
+                                        {{ selected_car.customer_phone }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="inquiry-column">
+                            <h4>Customer Information</h4>
+                            <div class="inquiry-data">
+                                <div class="inquiry-details">
+                                    <i data-lucide="user"></i>
+                                    <p>
+                                        {{ sale.buyer_name }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="phone"></i>
+                                    <p>
+                                        {{ sale.old_car_buyer.contact }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="mail"></i>
+                                    <p>
+                                        {{ sale.old_car_buyer.email }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="map-pin"></i>
+                                    <p>
+                                        {{ sale.old_car_buyer.address_line_1 }},
+                                        {{ sale.old_car_buyer.address_line_2 }},
+                                        {{ sale.old_car_buyer.city_name }},
+                                        {{ sale.old_car_buyer.pincode }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="inquiry-column">
+                        <h4>Vehicle Details</h4>
+                        <div class="inquiry-data">
+                            <div class="inquiry-details">
+                                <i data-lucide="user"></i>
+                                <p>
+                                    <strong>Dealer:</strong>
+                                    {{ selected_car.dealer_name }}
+                                </p>
+                            </div>
+                            <div class="inquiry-details">
+                                <i data-lucide="car"></i>
+                                <p>
+                                    <strong>Manufacture:</strong>
+                                    {{ selected_car.manufacturer_name }}
+                                </p>
+                            </div>
+                            <div class="inquiry-details">
+                                <i data-lucide="car"></i>
+                                <p>
+                                    <strong>Model:</strong>
+                                    {{ selected_car.model_name }}
+                                </p>
+                            </div>
+                            <div class="inquiry-details">
+                                <i data-lucide="palette"></i>
+                                <p>
+                                    <strong>Color:</strong>
+                                    {{ selected_car.color }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if sale.car_type == 'old' %}
+                    <div class="inquiry-row">
+                        <div class="inquiry-column">
+                            <h4>Buyer Documents</h4>
+                            <div class="inquiry-data">
+                                <div class="inquiry-details">
+                                    <i data-lucide="credit-card"></i>
+                                    <a
+                                        href="/uploads/documents/{{ sale.old_car_buyer.pan_card }}"
+                                        target="_blank"
+                                    >
+                                        PAN Card
+                                    </a>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="contact"></i>
+                                    <a
+                                        href="/uploads/documents/{{ sale.old_car_buyer.aadhar_card }}"
+                                        target="_blank"
+                                    >
+                                        Aadhar Card
+                                    </a>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="id-card"></i>
+                                    <a
+                                        href="/uploads/documents/{{ sale.old_car_buyer.driving_license }}"
+                                        target="_blank"
+                                    >
+                                        Driving License
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if selected_car.ex_showroom_price is defined %}
+                    <div class="inquiry-row">
+                        <div class="inquiry-column">
+                            <h4>Customer Price Breakdown</h4>
+                            <div class="inquiry-data">
+                                <div class="inquiry-details">
+                                    <i data-lucide="home"></i>
+                                    <p>
+                                        <strong>Ex-Showroom Price:</strong> ₹{{
+                                            selected_car.ex_showroom_price|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="car"></i>
+                                    <p>
+                                        <strong>RTO Tax:</strong> ₹{{
+                                            selected_car.rto_tax|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="umbrella"></i>
+                                    <p>
+                                        <strong>Insurance:</strong> ₹{{
+                                            selected_car.insurance|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="file-plus"></i>
+                                    <p>
+                                        <strong>AMC/GMC Tax:</strong> ₹{{
+                                            selected_car.amc_gmc_tax|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="shield"></i>
+                                    <p>
+                                        <strong>Extended Warranty:</strong> ₹{{
+                                            selected_car.ext_warranty|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="box"></i>
+                                    <p>
+                                        <strong>Accessories:</strong> ₹{{
+                                            selected_car.accessories|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="gift"></i>
+                                    <p>
+                                        <strong>Parivar Accessories:</strong>
+                                        ₹{{
+                                            selected_car.krunal_accessories|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="tag"></i>
+                                    <p>
+                                        <strong>Fast Tag:</strong> ₹{{
+                                            selected_car.fast_tag|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="percent"></i>
+                                    <p>
+                                        <strong>TCS:</strong> ₹{{
+                                            selected_car.tcs|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="credit-card"></i>
+                                    <p>
+                                        <strong>Loyalty Card:</strong> ₹{{
+                                            selected_car.loyalty_card|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="credit-card"></i>
+                                    <p>
+                                        <strong>Driver Price:</strong> ₹{{
+                                            selected_car.driver_price|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="calculator"></i>
+                                    <p>
+                                        <strong>Total On-Road Price:</strong> ₹{{
+                                            selected_car.total_on_road|number_format
+                                        }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inquiry-column">
+                            <h4>Customer Discount Breakdown</h4>
+                            <div class="inquiry-data">
+                                <div class="inquiry-details">
+                                    <i data-lucide="thumbs-up"></i>
+                                    <p>
+                                        <strong>Consumer Offer:</strong> ₹{{
+                                            selected_car.consumer_offer|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="users"></i>
+                                    <p>
+                                        <strong>Corporate Discount:</strong>
+                                        ₹{{
+                                            selected_car.corporate_discount|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="minus-circle"></i>
+                                    <p>
+                                        <strong>Other Discount:</strong> ₹{{
+                                            selected_car.other_discount|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="dollar-sign"></i>
+                                    <p>
+                                        <strong>Net On-Road Price:</strong> ₹{{
+                                            selected_car.net_on_road|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="hand-helping"></i>
+                                    <p>
+                                        <strong>Disbursement:</strong> ₹{{
+                                            selected_car.disbursement|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="wallet"></i>
+                                    <p>
+                                        <strong>Down Payment:</strong> ₹{{
+                                            selected_car.down_payment|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="receipt-indian-rupee"></i>
+                                    <p>
+                                        <strong>Net Short Payment:</strong> ₹{{
+                                            selected_car.net_short_payment|number_format
+                                        }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    {% set final_price = selected_car.current_price %}
+                {% endif %}
+                {% if selected_car.extra_charges is defined %}
+                    <div class="inquiry-row">
+                        <div class="inquiry-column">
+                            <h4>Pricing Breakdown</h4>
+                            <div class="inquiry-data">
+                                {% for charge in selected_car.extra_charges %}
+                                    {% set final_price = final_price
+                                        + charge.amount
+                                    %}
+                                    <div class="inquiry-details">
+                                        <i data-lucide="plus-circle"></i>
+                                        <p>
+                                            <strong>
+                                                {{ charge.description }}:
+                                            </strong>
+                                            ₹{{ charge.amount|number_format }}
+                                        </p>
+                                    </div>
+                                {% endfor %}
+                                <div class="inquiry-details">
+                                    <i data-lucide="shopping-cart"></i>
+                                    <p>
+                                        <strong>Total Price:</strong>
+                                        ₹{{ final_price|number_format }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {# {% if sale.sale_type == 'loan' and loan is not null %}
+                    <div class="inquiry-row">
+                        <div class="inquiry-column">
+                            <h4>Loan Details</h4>
+                            <div class="inquiry-data">
+                                <div class="inquiry-details">
+                                    <i data-lucide="banknote"></i>
+                                    <p>
+                                        <strong>Loan Amount:</strong>
+                                        {{ loan.loan_amount }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="percent"></i>
+                                    <p>
+                                        <strong>Interest Rate:</strong>
+                                        {{ loan.interest_rate }}%
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="calendar"></i>
+                                    <p>
+                                        <strong>Tenure:</strong>
+                                        {{ loan.number_of_parts }} months
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="credit-card"></i>
+                                    <p>
+                                        <strong>EMI Amount:</strong>
+                                        ₹{{
+                                            loan.installment_amount|number_format
+                                        }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        {% if (installments|length) > 0 %}
+                            <div class="inquiry-column">
+                                <div class="loan-schedule-header">
+                                    <h4>Installment Schedule</h4>
+                                    <div class="schedule-summary">
+                                        <span class="status success">
+                                            <i
+                                                data-lucide="check-circle"
+                                                class="text-success"
+                                            >
+
+                                            </i>
+                                            {{
+                                                installments
+                                                    |filter(
+                                                        i => i.status == 'paid'
+                                                    )
+                                                    |length
+                                            }} Paid
+                                        </span>
+                                        <span class="status warning">
+                                            <i data-lucide="clock"></i>
+                                            {{
+                                                installments
+                                                    |filter(
+                                                        i => i.status != 'paid'
+                                                    )
+                                                    |length
+                                            }} Pending
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="inquiry-data installment-schedule">
+                                    {% for installment in installments %}
+                                        <div
+                                            class="inquiry-details loan-details {% if installment.status == 'paid' %}paid-installment{% endif %}"
+                                        >
+                                            <div class="installment-content">
+                                                <div class="installment-icon">
+                                                    <i
+                                                        data-lucide="calendar-check"
+                                                    >
+
+                                                    </i>
+                                                </div>
+                                                <div class="installment-info">
+                                                    <div
+                                                        class="installment-date"
+                                                    >
+                                                        <strong>
+                                                            {{
+                                                                installment.due_date|date(
+                                                                    'M Y'
+                                                                )
+                                                            }}
+                                                        </strong>
+                                                        {% if
+                                                            (installment.due_date|date(
+                                                                'U'
+                                                            ))
+                                                                < ('now'|date(
+                                                                    'U'
+                                                                ))
+                                                                and installment.status
+                                                                    != 'paid' %}
+                                                            <span
+                                                                class="overdue-tag"
+                                                            >
+                                                                Overdue
+                                                            </span>
+                                                        {% endif %}
+                                                    </div>
+                                                    <p
+                                                        class="installment-amount"
+                                                    >
+                                                        ₹{{ installment.amount_due|number_format }}
+                                                    </p>
+                                                </div>
+                                                <div class="installment-status">
+                                                    <form
+                                                        method="POST"
+                                                        action="{{
+                                                        url_for(
+                                                            'sales.record-payment',
+                                                            {
+                                                                id: installment.id,
+                                                                sale_id: sale.id
+                                                            }
+                                                        )
+                                                        }}"
+                                                        class="status-form"
+                                                    >
+                                                        <input
+                                                            type="hidden"
+                                                            name="_METHOD"
+                                                            value="PUT"
+                                                        />
+                                                        {% if
+                                                            installment.status
+                                                                == 'paid' %}
+                                                            <div
+                                                                class="form-group row"
+                                                            >
+                                                                <input
+                                                                    type="date"
+                                                                    name="payment_date"
+                                                                    id="payment_date"
+                                                                    value="{{ installment.payment_date|date(
+                                                                        'Y-m-d'
+                                                                    ) }}"
+                                                                    readonly
+                                                                />
+                                                                <select
+                                                                    name="status"
+                                                                    class="status-select {{ installment.status == 'paid' ? 'status-paid' : 'status-pending' }}"
+                                                                    onchange="this.form.submit()"
+                                                                    disabled
+                                                                >
+                                                                    <option
+                                                                        value="{{
+                                                                        installment.status
+                                                                        }}"
+                                                                    >
+                                                                        {{
+                                                                            installment.status|capitalize
+                                                                        }}
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        {% else %}
+                                                            <div
+                                                                class="form-group row"
+                                                            >
+                                                                <input
+                                                                    type="date"
+                                                                    name="payment_date"
+                                                                    id="payment_date"
+                                                                />
+                                                                <select
+                                                                    name="status"
+                                                                    class="status-select {{ installment.status == 'paid' ? 'status-paid' : 'status-pending' }}"
+                                                                    onchange="this.form.submit()"
+                                                                >
+                                                                    <option
+                                                                        value="pending"
+                                                                        {{
+                                                                        installment.status
+                                                                            != 'paid'
+                                                                            ? 'selected'
+                                                                            : ''
+                                                                        }}
+                                                                    >
+                                                                        Pending
+                                                                    </option>
+                                                                    <option
+                                                                        value="paid"
+                                                                        {{
+                                                                        installment.status
+                                                                            == 'paid'
+                                                                            ? 'selected'
+                                                                            : ''
+                                                                        }}
+                                                                    >
+                                                                        Paid
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        {% endif %}
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %} #}
+
+                {% if sale.sale_type == 'full' %}
+                    <div class="inquiry-row">
+                        <div class="inquiry-column">
+                            <h4>Customer Payment Details</h4>
+                            <div class="inquiry-data">
+                                <div class="inquiry-details">
+                                    <i data-lucide="banknote"></i>
+                                    <p>
+                                        <strong>Total Amount:</strong>
+                                        ₹{{
+                                            sale.full_payment.total_amount|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="check-circle"></i>
+                                    <p>
+                                        <strong>Amount Paid:</strong>
+                                        ₹{{
+                                            sale.full_payment.amount_paid|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="circle-dollar-sign"></i>
+                                    <p>
+                                        <strong>Remaining Amount:</strong>
+                                        ₹{{
+                                            sale.full_payment.remaining_amount|number_format
+                                        }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inquiry-row">
+                        <div class="inquiry-column">
+                            <div class="loan-schedule-header">
+                                <h4>Customer Payment History</h4>
+                                <div class="schedule-summary">
+                                    <span class="status success">
+                                        <i data-lucide="banknote"></i>
+                                        ₹{{
+                                            sale.full_payment.amount_paid|number_format
+                                        }} Paid
+                                    </span>
+                                    <span class="status warning">
+                                        <i data-lucide="circle-dollar-sign"></i>
+                                        ₹{{
+                                            sale.full_payment.remaining_amount|number_format
+                                        }} Remaining
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="inquiry-data installment-schedule">
+                                <div class="inquiry-details loan-details">
+                                    <div class="installment-content">
+                                        <div class="installment-icon">
+                                            <i data-lucide="plus-circle"></i>
+                                        </div>
+                                        <div class="installment-info">
+                                            <form
+                                                method="POST"
+                                                action="{{
+                                                url_for(
+                                                    'sales.record-full-payment',
+                                                    {
+                                                        id: sale.full_payment.id,
+                                                        sale_id: sale.id
+                                                    }
+                                                )
+                                                }}"
+                                                class="payment-form"
+                                            >
+                                                <input
+                                                    type="hidden"
+                                                    name="_METHOD"
+                                                    value="PUT"
+                                                />
+                                                <div class="form-group row">
+                                                    <input
+                                                        type="number"
+                                                        name="amount"
+                                                        placeholder="Enter amount"
+                                                        step="0.01"
+                                                        max="{{
+                                                        sale.full_payment.remaining_amount
+                                                        }}"
+                                                        required
+                                                        class="form-control"
+                                                    />
+                                                    <select
+                                                        name="payment_method"
+                                                        required
+                                                        class="form-control"
+                                                    >
+                                                        <option value="cash">
+                                                            Cash
+                                                        </option>
+                                                        <option value="check">
+                                                            Check
+                                                        </option>
+                                                        <option value="online">
+                                                            Online
+                                                        </option>
+                                                        <option value="bank">
+                                                            Bank
+                                                        </option>
+                                                    </select>
+                                                    <input
+                                                        type="date"
+                                                        name="payment_date"
+                                                        value="{{ 'now'|date(
+                                                            'Y-m-d'
+                                                        ) }}"
+                                                        required
+                                                        class="form-control"
+                                                    />
+                                                    <input
+                                                        type="submit"
+                                                        class="btn btn-primary"
+                                                        value="Add Payment"
+                                                    />
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% for payment in sale.full_payment.payments %}
+                                    <div
+                                        class="inquiry-details loan-details paid-installment"
+                                    >
+                                        <div class="installment-content">
+                                            <div class="installment-icon">
+                                                {% if
+                                                    payment.payment_method
+                                                        == 'cash' %}
+                                                    <i data-lucide="banknote">
+
+                                                    </i>
+                                                {% elseif
+                                                    payment.payment_method
+                                                        == 'check' %}
+                                                    <i
+                                                        data-lucide="credit-card"
+                                                    >
+
+                                                    </i>
+                                                {% elseif
+                                                    payment.payment_method
+                                                        == 'online' %}
+                                                    <i data-lucide="smartphone">
+
+                                                    </i>
+                                                {% else %}
+                                                    <i data-lucide="landmark">
+
+                                                    </i>
+                                                {% endif %}
+                                            </div>
+                                            <div class="installment-info">
+                                                <div class="payment-form">
+                                                    <div class="form-group row">
+                                                        <input
+                                                            type="number"
+                                                            name="amount"
+                                                            placeholder="Enter amount"
+                                                            step="0.01"
+                                                            value="{{
+                                                            payment.amount
+                                                            }}"
+                                                            required
+                                                            class="form-control"
+                                                        />
+                                                        <input
+                                                            type="text"
+                                                            name="payment_method"
+                                                            id="payment_method"
+                                                            value="{{ payment.payment_method|capitalize }}"
+                                                            class="form-control"
+                                                        />
+                                                        <input
+                                                            type="date"
+                                                            name="payment_date"
+                                                            value="{{ payment.payment_date|date(
+                                                                'Y-m-d'
+                                                            ) }}"
+                                                            required
+                                                            class="form-control"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if sale.car_type == 'new' %}
+                    <div class="inquiry-row">
+                        <div class="inquiry-column">
+                            <h4>Dealer Price Breakdown</h4>
+                            <div class="inquiry-data">
+                                <div class="inquiry-details">
+                                    <i data-lucide="home"></i>
+                                    <p>
+                                        <strong>Ex-Showroom Price:</strong> ₹{{
+                                            selected_car.dealer_ex_showroom_price|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="car"></i>
+                                    <p>
+                                        <strong>RTO Tax:</strong> ₹{{
+                                            selected_car.dealer_rto_tax|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="umbrella"></i>
+                                    <p>
+                                        <strong>Insurance:</strong> ₹{{
+                                            selected_car.dealer_insurance|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="file-plus"></i>
+                                    <p>
+                                        <strong>AMC/GMC Tax:</strong> ₹{{
+                                            selected_car.dealer_amc_gmc_tax|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="shield"></i>
+                                    <p>
+                                        <strong>Extended Warranty:</strong> ₹{{
+                                            selected_car.dealer_ext_warranty|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="box"></i>
+                                    <p>
+                                        <strong>Accessories:</strong> ₹{{
+                                            selected_car.dealer_accessories|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="gift"></i>
+                                    <p>
+                                        <strong>Parivar Accessories:</strong>
+                                        ₹{{
+                                            selected_car.dealer_krunal_accessories|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="tag"></i>
+                                    <p>
+                                        <strong>Fast Tag:</strong> ₹{{
+                                            selected_car.dealer_fast_tag|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="percent"></i>
+                                    <p>
+                                        <strong>TCS:</strong> ₹{{
+                                            selected_car.dealer_tcs|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="credit-card"></i>
+                                    <p>
+                                        <strong>Loyalty Card:</strong> ₹{{
+                                            selected_car.dealer_loyalty_card|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="credit-card"></i>
+                                    <p>
+                                        <strong>Driver Price:</strong> ₹{{
+                                            selected_car.dealer_driver_price|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="calculator"></i>
+                                    <p>
+                                        <strong>Total On-Road Price:</strong> ₹{{
+                                            selected_car.dealer_total_on_road|number_format
+                                        }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inquiry-column">
+                            <h4>Dealer Discount Breakdown</h4>
+                            <div class="inquiry-data">
+                                <div class="inquiry-details">
+                                    <i data-lucide="thumbs-up"></i>
+                                    <p>
+                                        <strong>Consumer Offer:</strong> ₹{{
+                                            selected_car.dealer_consumer_offer|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="users"></i>
+                                    <p>
+                                        <strong>Corporate Discount:</strong>
+                                        ₹{{
+                                            selected_car.dealer_corporate_discount|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="minus-circle"></i>
+                                    <p>
+                                        <strong>Other Discount:</strong> ₹{{
+                                            selected_car.dealer_other_discount|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="dollar-sign"></i>
+                                    <p>
+                                        <strong>Net On-Road Price:</strong> ₹{{
+                                            selected_car.dealer_net_on_road|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="hand-helping"></i>
+                                    <p>
+                                        <strong>Disbursement:</strong> ₹{{
+                                            selected_car.dealer_disbursement|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="wallet"></i>
+                                    <p>
+                                        <strong>Down Payment:</strong> ₹{{
+                                            selected_car.dealer_down_payment|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="receipt-indian-rupee"></i>
+                                    <p>
+                                        <strong>Net Short Payment:</strong> ₹{{
+                                            selected_car.dealer_net_short_payment|number_format
+                                        }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inquiry-row">
+                        <div class="inquiry-column">
+                            <h4>Dealer Payment Details</h4>
+                            <div class="inquiry-data">
+                                <div class="inquiry-details">
+                                    <i data-lucide="banknote"></i>
+                                    <p>
+                                        <strong>Total Amount:</strong>
+                                        ₹{{
+                                            sale.dealer_full_payment.total_amount|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="check-circle"></i>
+                                    <p>
+                                        <strong>Amount Paid:</strong>
+                                        ₹{{
+                                            sale.dealer_full_payment.amount_paid|number_format
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="inquiry-details">
+                                    <i data-lucide="circle-dollar-sign"></i>
+                                    <p>
+                                        <strong>Remaining Amount:</strong>
+                                        ₹{{
+                                            sale.dealer_full_payment.remaining_amount|number_format
+                                        }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inquiry-row">
+                        <div class="inquiry-column">
+                            <div class="loan-schedule-header">
+                                <h4>Dealer Payment History</h4>
+                                <div class="schedule-summary">
+                                    <span class="status success">
+                                        <i data-lucide="banknote"></i>
+                                        ₹{{
+                                            sale.dealer_full_payment.amount_paid|number_format
+                                        }} Paid
+                                    </span>
+                                    <span class="status warning">
+                                        <i data-lucide="circle-dollar-sign"></i>
+                                        ₹{{
+                                            sale.dealer_full_payment.remaining_amount|number_format
+                                        }} Remaining
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="inquiry-data installment-schedule">
+                                <div class="inquiry-details loan-details">
+                                    <div class="installment-content">
+                                        <div class="installment-icon">
+                                            <i data-lucide="plus-circle"></i>
+                                        </div>
+                                        <div class="installment-info">
+                                            <form
+                                                method="POST"
+                                                action="{{
+                                                url_for(
+                                                    'sales.record-dealer-full-payment',
+                                                    {
+                                                        id: sale.dealer_full_payment.id,
+                                                        sale_id: sale.id
+                                                    }
+                                                )
+                                                }}"
+                                                class="payment-form"
+                                            >
+                                                <input
+                                                    type="hidden"
+                                                    name="_METHOD"
+                                                    value="PUT"
+                                                />
+                                                <div class="form-group row">
+                                                    <input
+                                                        type="number"
+                                                        name="dealer_amount"
+                                                        placeholder="Enter amount"
+                                                        step="0.01"
+                                                        max="{{
+                                                        sale.dealer_full_payment.remaining_amount
+                                                        }}"
+                                                        required
+                                                        class="form-control"
+                                                    />
+                                                    <select
+                                                        name="dealer_payment_method"
+                                                        required
+                                                        class="form-control"
+                                                    >
+                                                        <option value="cash">
+                                                            Cash
+                                                        </option>
+                                                        <option value="check">
+                                                            Check
+                                                        </option>
+                                                        <option value="online">
+                                                            Online
+                                                        </option>
+                                                        <option value="bank">
+                                                            Bank
+                                                        </option>
+                                                    </select>
+                                                    <input
+                                                        type="date"
+                                                        name="dealer_payment_date"
+                                                        value="{{ 'now'|date(
+                                                            'Y-m-d'
+                                                        ) }}"
+                                                        required
+                                                        class="form-control"
+                                                    />
+                                                    <input
+                                                        type="submit"
+                                                        class="btn btn-primary"
+                                                        value="Add Payment"
+                                                    />
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% for payment in sale.dealer_full_payment.payments %}
+                                    <div
+                                        class="inquiry-details loan-details paid-installment"
+                                    >
+                                        <div class="installment-content">
+                                            <div class="installment-icon">
+                                                {% if
+                                                    payment.payment_method
+                                                        == 'cash' %}
+                                                    <i data-lucide="banknote">
+
+                                                    </i>
+                                                {% elseif
+                                                    payment.payment_method
+                                                        == 'check' %}
+                                                    <i
+                                                        data-lucide="credit-card"
+                                                    >
+
+                                                    </i>
+                                                {% elseif
+                                                    payment.payment_method
+                                                        == 'online' %}
+                                                    <i data-lucide="smartphone">
+
+                                                    </i>
+                                                {% else %}
+                                                    <i data-lucide="landmark">
+
+                                                    </i>
+                                                {% endif %}
+                                            </div>
+                                            <div class="installment-info">
+                                                <div class="payment-form">
+                                                    <div class="form-group row">
+                                                        <input
+                                                            type="number"
+                                                            name="amount"
+                                                            placeholder="Enter amount"
+                                                            step="0.01"
+                                                            value="{{
+                                                            payment.amount
+                                                            }}"
+                                                            required
+                                                            class="form-control"
+                                                        />
+                                                        <input
+                                                            type="text"
+                                                            name="payment_method"
+                                                            id="payment_method"
+                                                            value="{{ payment.payment_method|capitalize }}"
+                                                            class="form-control"
+                                                        />
+                                                        <input
+                                                            type="date"
+                                                            name="payment_date"
+                                                            value="{{ payment.payment_date|date(
+                                                                'Y-m-d'
+                                                            ) }}"
+                                                            required
+                                                            class="form-control"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {# <div class="inquiry-actions">
+                    <button class="btn btn-primary">
+                        <i data-lucide="printer"></i>
+                        Print Details
+                    </button>
+                </div> #}
+            </div>
+        </div>
+    </div>
+    <script src="/js/print-sale.js"></script>
+{% endblock %}

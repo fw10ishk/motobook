@@ -1,0 +1,1088 @@
+{% extends 'layouts/app.twig' %}
+
+{% block title %}
+    Add New Car
+{% endblock %}
+
+{% block content %}
+    <div class="page">
+        {% include 'common/header.twig' with {
+            title: 'Add New Car',
+            button: false,
+            back_button: true,
+            back_url: url_for('new-cars.index')
+        } %}
+        <div class="page-content">
+            <form
+                class="form-container"
+                method="POST"
+                enctype="multipart/form-data"
+                action="{{ url_for('new-cars.store') }}"
+            >
+                <div class="form-legend">
+                    <h4>Basic Information</h4>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="docket_number">Docket Number*</label>
+                            <!-- prettier-ignore -->
+                            {% set random_number %}{{ random(100000, 999999) }}{% endset %}
+                            <input
+                                type="text"
+                                name="docket_number"
+                                id="docket_number"
+                                value="{{ random_number }}"
+                                readonly
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="entry_type">Entry Type*</label>
+                            <select name="entry_type" id="entry_type">
+                                <option value="" disabled selected>
+                                    Select Entry Type
+                                </option>
+                                <option value="sales">
+                                    Sales
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="booking_date">Booking Date*</label>
+                            <input
+                                type="date"
+                                name="booking_date"
+                                id="booking_date"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="delivery_date">Delivery Date*</label>
+                            <input
+                                type="date"
+                                name="delivery_date"
+                                id="delivery_date"
+                                required
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-legend">
+                    <h4>Customer Details</h4>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="customer_name">Customer Name*</label>
+                            <input
+                                type="text"
+                                name="customer_name"
+                                id="customer_name"
+                                placeholder="Enter Customer Name"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="customer_phone">Customer Phone*</label>
+                            <input
+                                type="tel"
+                                name="customer_phone"
+                                id="customer_phone"
+                                placeholder="Enter Customer Phone"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer_address1">Address Line 1*</label>
+                        <input
+                            type="text"
+                            name="customer_address1"
+                            id="customer_address1"
+                            placeholder="Enter Address Line 1"
+                            required
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="customer_address2">Address Line 2</label>
+                        <input
+                            type="text"
+                            name="customer_address2"
+                            id="customer_address2"
+                            placeholder="Enter Address Line 2"
+                        />
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="city_name">City*</label>
+                            <input
+                                type="text"
+                                name="city_name"
+                                id="city_name"
+                                class="autocomplete"
+                                data-autocomplete-url="{{
+                                url_for(
+                                    'cities.search'
+                                )
+                                }}"
+                                placeholder="Enter City Name"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="pincode">Pincode*</label>
+                            <input
+                                type="text"
+                                name="pincode"
+                                id="pincode"
+                                placeholder="Enter Pincode"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="email">Email*</label>
+                            <input
+                                type="email"
+                                name="email"
+                                id="email"
+                                placeholder="Enter Email"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="customer_dob">Date of Birth*</label>
+                            <input
+                                type="date"
+                                name="customer_dob"
+                                id="customer_dob"
+                                required
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-legend">
+                    <h4>Nominee Details</h4>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="nominee_relationship">
+                                Nominee Relation*
+                            </label>
+                            <select
+                                name="nominee_relationship"
+                                id="nominee_relationship"
+                                required
+                            >
+                                <option value="" disabled selected>
+                                    Select Nominee Relation
+                                </option>
+
+                                <option value="father">
+                                    Father
+                                </option>
+                                <option value="mother">
+                                    Mother
+                                </option>
+                                <option value="husband">
+                                    Husband
+                                </option>
+                                <option value="wife">
+                                    Wife
+                                </option>
+                                <option value="son">
+                                    Son
+                                </option>
+                                <option value="daughter">
+                                    Daughter
+                                </option>
+                                <option value="brother">
+                                    Brother
+                                </option>
+                                <option value="sister">
+                                    Sister
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="nominee_name">Nominee Name*</label>
+                            <input
+                                type="text"
+                                name="nominee_name"
+                                id="nominee_name"
+                                placeholder="Enter Nominee Name"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="nominee_dob">
+                                Nominee Date of Birth*
+                            </label>
+                            <input
+                                type="date"
+                                name="nominee_dob"
+                                id="nominee_dob"
+                                required
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-legend">
+                    <h4>Vehicle Information</h4>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="manufacturer_name">Manufacturer*</label>
+                            <input
+                                type="text"
+                                name="manufacturer_name"
+                                id="manufacturer_name"
+                                class="autocomplete"
+                                data-autocomplete-url="{{
+                                url_for(
+                                    'manufacturers.search'
+                                )
+                                }}"
+                                placeholder="Enter Manufacturer Name"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="model_name">Model*</label>
+                            <input
+                                type="text"
+                                name="model_name"
+                                id="model_name"
+                                class="autocomplete"
+                                data-autocomplete-url="{{
+                                url_for(
+                                    'car-models.search'
+                                )
+                                }}"
+                                placeholder="Enter Model Name"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="color">Color*</label>
+                            <input
+                                type="text"
+                                name="color"
+                                id="color"
+                                placeholder="Enter Color"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="manufacturer_year">
+                                Manufacture Year*
+                            </label>
+                            <input
+                                type="text"
+                                name="manufacturer_year"
+                                id="manufacturer_year"
+                                placeholder="Enter Manufacture Year"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="fuel_type">Fuel Type*</label>
+                            <input
+                                type="text"
+                                name="fuel_type"
+                                id="fuel_type"
+                                placeholder="Enter Fuel Type"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="registration_no">
+                                Registration Number*
+                            </label>
+                            <input
+                                type="text"
+                                name="registration_no"
+                                id="registration_no"
+                                placeholder="Enter Registration Number"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="chassis_no">Chassis Number*</label>
+                            <input
+                                type="text"
+                                name="chassis_no"
+                                id="chassis_no"
+                                placeholder="Enter Chassis Number"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="engine_no">Engine Number*</label>
+                            <input
+                                type="text"
+                                name="engine_no"
+                                id="engine_no"
+                                placeholder="Enter Engine Number"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="hp_name">HP*</label>
+                            <input
+                                type="text"
+                                name="hp_name"
+                                id="hp_name"
+                                class="autocomplete"
+                                data-autocomplete-url="{{
+                                url_for(
+                                    'hps.search'
+                                )
+                                }}"
+                                placeholder="Enter HP Name"
+                                required
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-legend">
+                    <h4>Additional Details</h4>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="dealer_name">Dealer*</label>
+                            <input
+                                type="text"
+                                name="dealer_name"
+                                id="dealer_name"
+                                class="autocomplete"
+                                data-autocomplete-url="{{
+                                url_for(
+                                    'dealers.search'
+                                )
+                                }}"
+                                placeholder="Enter Dealer Name"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="location">Location*</label>
+                            <input
+                                type="text"
+                                name="location"
+                                id="location"
+                                placeholder="Enter Location"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="executive_branch_name">
+                                Executive Branch*
+                            </label>
+                            <input
+                                type="text"
+                                name="executive_branch_name"
+                                id="executive_branch_name"
+                                class="autocomplete"
+                                data-autocomplete-url="{{
+                                url_for(
+                                    'executive-branchs.search'
+                                )
+                                }}"
+                                placeholder="Enter Executive Branch Name"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="executive_name">Executive*</label>
+                            <input
+                                type="text"
+                                name="executive_name"
+                                id="executive_name"
+                                class="autocomplete"
+                                data-autocomplete-url="{{
+                                url_for(
+                                    'executives.search'
+                                )
+                                }}"
+                                placeholder="Enter Executive Name"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="insurance_company_name">
+                                Insurance Company*
+                            </label>
+                            <input
+                                type="text"
+                                name="insurance_company_name"
+                                id="insurance_company_name"
+                                class="autocomplete"
+                                data-autocomplete-url="{{
+                                url_for(
+                                    'insurance-companies.search'
+                                )
+                                }}"
+                                placeholder="Enter Insurance Company Name"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="rto_name">RTO*</label>
+                            <input
+                                type="text"
+                                name="rto_name"
+                                id="rto_name"
+                                class="autocomplete"
+                                data-autocomplete-url="{{
+                                url_for(
+                                    'rtos.search'
+                                )
+                                }}"
+                                placeholder="Enter RTO Name"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="rto_code">RTO Code*</label>
+                        <input
+                            type="text"
+                            name="rto_code"
+                            id="rto_code"
+                            class="autocomplete"
+                            data-autocomplete-url="{{
+                            url_for(
+                                'rto-codes.search'
+                            )
+                            }}"
+                            placeholder="Enter RTO Code"
+                            required
+                        />
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="parsing_status">Parsing Status*</label>
+                            <select
+                                name="parsing_status"
+                                id="parsing_status"
+                                required
+                            >
+                                <option value="" disabled selected>
+                                    Select Parsing Status
+                                </option>
+                                <option value="pending">
+                                    Pending
+                                </option>
+                                <option value="completed">
+                                    Completed
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="number_plate">Number Plate Type*</label>
+                            <select
+                                name="number_plate"
+                                id="number_plate"
+                                required
+                            >
+                                <option value="" disabled selected>
+                                    Select Number Plate Type
+                                </option>
+                                <option value="received">
+                                    Received
+                                </option>
+                                <option value="pending">
+                                    Pending
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="choice_number">Choice Number</label>
+                        <input
+                            type="text"
+                            name="choice_number"
+                            id="choice_number"
+                            placeholder="Enter Choice Number"
+                        />
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="scheme">Scheme</label>
+                            <input
+                                type="text"
+                                name="scheme"
+                                id="scheme"
+                                placeholder="Enter Scheme"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="broker_name">Broker Name</label>
+                            <input
+                                type="text"
+                                name="broker_name"
+                                id="broker_name"
+                                placeholder="Enter Broker Name"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="other_remarks">Other Remarks</label>
+                        <textarea
+                            name="other_remarks"
+                            id="other_remarks"
+                            placeholder="Enter Other Remarks"
+                            rows="3"
+                        ></textarea>
+                    </div>
+                </div>
+
+                <div class="form-legend">
+                    <h4>Customer Pricing Details</h4>
+                    <div class="form-group">
+                        <label for="ex_showroom_price">
+                            Ex Showroom Price*
+                        </label>
+                        <input
+                            type="number"
+                            name="ex_showroom_price"
+                            id="ex_showroom_price"
+                            placeholder="Enter Ex Showroom Price"
+                            required
+                        />
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="rto_tax">RTO Tax</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="rto_tax"
+                                id="rto_tax"
+                                placeholder="Enter RTO Tax"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="insurance">Insurance</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="insurance"
+                                id="insurance"
+                                placeholder="Enter Insurance"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="amc_gmc_tax">AMC/GMC Tax</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="amc_gmc_tax"
+                                id="amc_gmc_tax"
+                                placeholder="Enter AMC/GMC Tax"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="ext_warranty">Extended Warranty</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="ext_warranty"
+                                id="ext_warranty"
+                                placeholder="Enter Extended Warranty"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="accessories">Accessories</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="accessories"
+                                id="accessories"
+                                placeholder="Enter Accessories"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="krunal_accessories">
+                                Parivar Accessories
+                            </label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="krunal_accessories"
+                                id="krunal_accessories"
+                                placeholder="Enter Parivar Accessories"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="fast_tag">Fast Tag</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="fast_tag"
+                                id="fast_tag"
+                                placeholder="Enter Fast Tag"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="tcs">TCS</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="tcs"
+                                id="tcs"
+                                placeholder="Enter TCS"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="loyalty_card">Loyalty Card</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="loyalty_card"
+                                id="loyalty_card"
+                                placeholder="Enter Loyalty Card"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="driver_price">Driver Price</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="driver_price"
+                                id="driver_price"
+                                placeholder="Enter Driver Price"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="total_on_road">
+                            <strong>Total On Road Price*</strong>
+                        </label>
+                        <input
+                            type="number"
+                            name="total_on_road"
+                            id="total_on_road"
+                            placeholder="Total On Road Price"
+                            readonly
+                        />
+                    </div>
+                </div>
+
+                <div class="form-legend">
+                    <h4>Customer Discount and Payment Details</h4>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="consumer_offer">Consumer Offer</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="consumer_offer"
+                                id="consumer_offer"
+                                placeholder="Enter Consumer Offer"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="corporate_discount">
+                                Corporate Discount
+                            </label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="corporate_discount"
+                                id="corporate_discount"
+                                placeholder="Enter Corporate Discount"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="other_discount">Other Discount</label>
+                        <input
+                            type="number"
+                            step="0.01"
+                            name="other_discount"
+                            id="other_discount"
+                            placeholder="Enter Other Discount"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="net_on_road">
+                            <strong>Net On Road Price*</strong>
+                        </label>
+                        <input
+                            type="number"
+                            name="net_on_road"
+                            id="net_on_road"
+                            placeholder="Total On Road Price"
+                            readonly
+                        />
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="disbursement">Disbursement</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="disbursement"
+                                id="disbursement"
+                                placeholder="Enter Disbursement"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="down_payment">Down Payment</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="down_payment"
+                                id="down_payment"
+                                placeholder="Enter Down Payment"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="net_short_payment">
+                            <strong>Net Short Payment Price*</strong>
+                        </label>
+                        <input
+                            type="number"
+                            name="net_short_payment"
+                            id="net_short_payment"
+                            placeholder="Total On Road Price"
+                            readonly
+                        />
+                    </div>
+                </div>
+
+                <div class="form-legend">
+                    <h4>Dealer Pricing Details</h4>
+                    <div class="form-group">
+                        <label for="dealer_ex_showroom_price">
+                            Ex Showroom Price*
+                        </label>
+                        <input
+                            type="number"
+                            name="dealer_ex_showroom_price"
+                            id="dealer_ex_showroom_price"
+                            placeholder="Enter Ex Showroom Price"
+                            required
+                        />
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="dealer_rto_tax">RTO Tax</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="dealer_rto_tax"
+                                id="dealer_rto_tax"
+                                placeholder="Enter RTO Tax"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="dealer_insurance">Insurance</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="dealer_insurance"
+                                id="dealer_insurance"
+                                placeholder="Enter Insurance"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="dealer_amc_gmc_tax">AMC/GMC Tax</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="dealer_amc_gmc_tax"
+                                id="dealer_amc_gmc_tax"
+                                placeholder="Enter AMC/GMC Tax"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="dealer_ext_warranty">
+                                Extended Warranty
+                            </label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="dealer_ext_warranty"
+                                id="dealer_ext_warranty"
+                                placeholder="Enter Extended Warranty"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="dealer_accessories">Accessories</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="dealer_accessories"
+                                id="dealer_accessories"
+                                placeholder="Enter Accessories"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="dealer_krunal_accessories">
+                                Parivar Accessories
+                            </label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="dealer_krunal_accessories"
+                                id="dealer_krunal_accessories"
+                                placeholder="Enter Parivar Accessories"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="dealer_fast_tag">Fast Tag</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="dealer_fast_tag"
+                                id="dealer_fast_tag"
+                                placeholder="Enter Fast Tag"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="dealer_tcs">TCS</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="dealer_tcs"
+                                id="dealer_tcs"
+                                placeholder="Enter TCS"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="dealer_loyalty_card">
+                                Dealer Loyalty Card
+                            </label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="dealer_loyalty_card"
+                                id="dealer_loyalty_card"
+                                placeholder="Enter Loyalty Card"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="dealer_driver_price">
+                                Dealer Driver Price
+                            </label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="dealer_driver_price"
+                                id="dealer_driver_price"
+                                placeholder="Enter Dealer Driver Price"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dealer_total_on_road">
+                            <strong>Total On Road Price*</strong>
+                        </label>
+                        <input
+                            type="number"
+                            name="dealer_total_on_road"
+                            id="dealer_total_on_road"
+                            placeholder="Total On Road Price"
+                            readonly
+                        />
+                    </div>
+                </div>
+
+                <div class="form-legend">
+                    <h4>Dealer Discount and Payment Details</h4>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="dealer_consumer_offer">
+                                Consumer Offer
+                            </label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="dealer_consumer_offer"
+                                id="dealer_consumer_offer"
+                                placeholder="Enter Consumer Offer"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="dealer_corporate_discount">
+                                Corporate Discount
+                            </label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="dealer_corporate_discount"
+                                id="dealer_corporate_discount"
+                                placeholder="Enter Corporate Discount"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="dealer_other_discount">
+                            Other Discount
+                        </label>
+                        <input
+                            type="number"
+                            step="0.01"
+                            name="dealer_other_discount"
+                            id="dealer_other_discount"
+                            placeholder="Enter Other Discount"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="dealer_net_on_road">
+                            <strong>Net On Road Price*</strong>
+                        </label>
+                        <input
+                            type="number"
+                            name="dealer_net_on_road"
+                            id="dealer_net_on_road"
+                            placeholder="Total On Road Price"
+                            readonly
+                        />
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="dealer_disbursement">
+                                Disbursement
+                            </label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="dealer_disbursement"
+                                id="dealer_disbursement"
+                                placeholder="Enter Disbursement"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="dealer_down_payment">
+                                Down Payment
+                            </label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="dealer_down_payment"
+                                id="dealer_down_payment"
+                                placeholder="Enter Down Payment"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="dealer_net_short_payment">
+                            <strong>Net Short Payment Price*</strong>
+                        </label>
+                        <input
+                            type="number"
+                            name="dealer_net_short_payment"
+                            id="dealer_net_short_payment"
+                            placeholder="Total On Road Price"
+                            readonly
+                        />
+                    </div>
+                </div>
+
+                <div class="form-legend">
+                    <h4>Documents</h4>
+                    <div class="form-group">
+                        <label for="kyc">KYC*</label>
+                        <input
+                            type="file"
+                            name="kyc"
+                            id="kyc"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            required
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="deal_agreement">Deal Agreement*</label>
+                        <input
+                            type="file"
+                            name="deal_agreement"
+                            id="deal_agreement"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            required
+                        />
+                    </div>
+                </div>
+
+                <div class="form-legend">
+                    <h4>Car Images</h4>
+                    <div class="form-group">
+                        <label for="main_image">Main Image*</label>
+                        <input
+                            type="file"
+                            name="main_image"
+                            id="main_image"
+                            accept="image/*"
+                        />
+                        <div
+                            id="main-image-preview"
+                            class="main-image-preview"
+                        ></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="additional_images">Additional Images</label>
+                        <input
+                            type="file"
+                            name="additional_images[]"
+                            id="additional_images"
+                            accept="images/*"
+                            max="4"
+                            multiple="true"
+                        />
+                        <div class="additional-images-wrapper">
+                            <div
+                                class="additional-images-preview"
+                                id="additional-images-preview"
+                            ></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-container-actions">
+                    <button class="btn btn-background-secondary">Cancel</button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        id="create-vehicle"
+                    >
+                        <i data-lucide="save"></i>
+                        Save Vehicle
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="/js/create-new-car.js"></script>
+{% endblock %}

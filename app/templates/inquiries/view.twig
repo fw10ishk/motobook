@@ -1,0 +1,141 @@
+{% extends 'layouts/app.twig' %}
+
+{% block title %}
+    Inquiry Details
+{% endblock %}
+
+{% block content %}
+    <div class="page">
+        {% include 'common/header.twig' with {
+            title: 'Inquiry Details',
+            button: true,
+            button_url: url_for(
+                'inquiries.edit',
+                {
+                    id: inquiry.id
+                }
+            ),
+            button_text: 'Edit Inquiry',
+            button_icon: 'square-pen',
+            back_button: true,
+            back_url: url_for('inquiries.index')
+        } %}
+        <div class="page-content">
+            <div class="view-inquiry">
+                <div class="inquiry-header">
+                    <div class="inquiry-title">
+                        <h2>{{ inquiry.customer_name }}</h2>
+                        <p>
+                            Inquiry ID: #INQ-{{ inquiry.id }}
+                        </p>
+                        <p>
+                            {{ inquiry.created_at|date('F j, Y') }}
+                        </p>
+                    </div>
+                    <div
+                        class="status {{ inquiry.status == 'pending' ? 'warning' : (inquiry.status == 'completed' ? 'success' : 'danger') }}"
+                    >
+                        {{ inquiry.status|capitalize }}
+                    </div>
+                </div>
+
+                <div class="inquiry-row">
+                    <div class="inquiry-column">
+                        <h4>Customer Information</h4>
+                        <div class="inquiry-data">
+                            <div class="inquiry-details">
+                                <i data-lucide="user"></i>
+                                <p>
+                                    {{ inquiry.customer_name }}
+                                </p>
+                            </div>
+                            <div class="inquiry-details">
+                                <i data-lucide="phone"></i>
+                                <p>
+                                    {{ inquiry.customer_phone }}
+                                </p>
+                            </div>
+                            <div class="inquiry-details">
+                                <i data-lucide="mail"></i>
+                                <p>
+                                    {{ inquiry.customer_email }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="inquiry-column">
+                        <h4>Inquiry Details</h4>
+                        <div class="inquiry-data">
+                            <div class="inquiry-details">
+                                <i data-lucide="car"></i>
+                                <p>
+                                    {{ inquiry.vehicle_of_interest }}
+                                </p>
+                            </div>
+                            <div class="inquiry-details">
+                                <i data-lucide="message-square"></i>
+                                <p>
+                                    Preferred Contact: {{ inquiry.preferred_contact_method|capitalize }}
+                                </p>
+                            </div>
+                            {% if inquiry.additional_notes %}
+                                <div class="inquiry-details">
+                                    <i data-lucide="clipboard"></i>
+                                    <p>
+                                        {{ inquiry.additional_notes }}
+                                    </p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="inquiry-column">
+                        <h4>Source Information</h4>
+                        <div class="inquiry-data">
+                            <div class="inquiry-details">
+                                <i data-lucide="info"></i>
+                                <p>
+                                    Source: {{ inquiry.inquiry_source|capitalize }}
+                                </p>
+                            </div>
+                            {% if
+                                inquiry.inquiry_source == 'referral'
+                                    and inquiry.referral_person %}
+                                <div class="inquiry-details">
+                                    <i data-lucide="user-plus"></i>
+                                    <p>
+                                        Referred by: {{ inquiry.referral_person }}
+                                    </p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inquiry-actions">
+                    {% if inquiry.status == 'pending' %}
+                        <form
+                            action="{{
+                            url_for(
+                                'inquiries.change-status',
+                                {
+                                    id: inquiry.id,
+                                    status: 'completed'
+                                }
+                            )
+                            }}"
+                            method="POST"
+                        >
+                            <input type="hidden" name="_METHOD" value="PUT" />
+                            <button type="submit" class="btn btn-success">
+                                <i data-lucide="check-circle"></i>
+                                Mark as Closed
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

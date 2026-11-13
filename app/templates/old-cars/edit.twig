@@ -1,0 +1,938 @@
+{% extends 'layouts/app.twig' %}
+
+{% block title %}
+    Edit Old Car
+{% endblock %}
+
+{% block content %}
+    <div class="page">
+        {% include 'common/header.twig' with {
+            title: 'Add Old Car',
+            button: false,
+            back_button: true,
+            back_url: url_for('old-cars.index')
+        } %}
+        {% for image in car.additional_images %}
+            {% include 'components/modal.twig' with {
+                id: 'delete-car-image-modal-' ~ image.id,
+                title: 'Delete this Image?',
+                description: 'This Action Cannot be Undone!',
+                modal_type: 'danger',
+                modal_icon: 'circle-x',
+                action_btn_type: 'btn-danger',
+                action_btn_text: 'Proceed',
+                action_btn_url: url_for(
+                    'old-cars.delete-image',
+                    {
+                        id: image.id
+                    }
+                )
+            } %}
+        {% endfor %}
+        {% include 'components/modal.twig' with {
+            id: 'delete-main-car-image-modal-' ~ car.id,
+            title: 'Delete this Image?',
+            description: 'This Action Cannot be Undone!',
+            modal_type: 'danger',
+            modal_icon: 'circle-x',
+            action_btn_type: 'btn-danger',
+            action_btn_text: 'Proceed',
+            action_btn_url: url_for(
+                'old-cars.delete-main-image',
+                {
+                    id: car.id
+                }
+            )
+        } %}
+        {% include 'components/modal.twig' with {
+            id: 'delete-rc-book-modal-' ~ car.id,
+            title: 'Delete RC Book?',
+            description: 'This Action Cannot be Undone!',
+            modal_type: 'danger',
+            modal_icon: 'circle-x',
+            action_btn_type: 'btn-danger',
+            action_btn_text: 'Proceed',
+            action_btn_url: url_for(
+                'old-cars.delete-document',
+                {
+                    id: car.id,
+                    document: 'rc_book'
+                }
+            )
+        } %}
+        {% include 'components/modal.twig' with {
+            id: 'delete-insurance-doc-modal-' ~ car.id,
+            title: 'Delete Insurance?',
+            description: 'This Action Cannot be Undone!',
+            modal_type: 'danger',
+            modal_icon: 'circle-x',
+            action_btn_type: 'btn-danger',
+            action_btn_text: 'Proceed',
+            action_btn_url: url_for(
+                'old-cars.delete-document',
+                {
+                    id: car.id,
+                    document: 'insurance_doc'
+                }
+            )
+        } %}
+        {% include 'components/modal.twig' with {
+            id: 'delete-owner-id-proof-modal-' ~ car.id,
+            title: 'Delete ID Proof?',
+            description: 'This Action Cannot be Undone!',
+            modal_type: 'danger',
+            modal_icon: 'circle-x',
+            action_btn_type: 'btn-danger',
+            action_btn_text: 'Proceed',
+            action_btn_url: url_for(
+                'old-cars.delete-document',
+                {
+                    id: car.id,
+                    document: 'owner_id_proof'
+                }
+            )
+        } %}
+        {% include 'components/modal.twig' with {
+            id: 'delete-pan-card-modal-' ~ car.id,
+            title: 'Delete PAN Card?',
+            description: 'This Action Cannot be Undone!',
+            modal_type: 'danger',
+            modal_icon: 'circle-x',
+            action_btn_type: 'btn-danger',
+            action_btn_text: 'Proceed',
+            action_btn_url: url_for(
+                'old-cars.delete-document',
+                {
+                    id: car.id,
+                    document: 'pan_card'
+                }
+            )
+        } %}
+        {% include 'components/modal.twig' with {
+            id: 'delete-aadhar-card-modal-' ~ car.id,
+            title: 'Delete Aadhar Card?',
+            description: 'This Action Cannot be Undone!',
+            modal_type: 'danger',
+            modal_icon: 'circle-x',
+            action_btn_type: 'btn-danger',
+            action_btn_text: 'Proceed',
+            action_btn_url: url_for(
+                'old-cars.delete-document',
+                {
+                    id: car.id,
+                    document: 'aadhar_card'
+                }
+            )
+        } %}
+        {% include 'components/modal.twig' with {
+            id: 'delete-noc-modal-' ~ car.id,
+            title: 'Delete NOC?',
+            description: 'This Action Cannot be Undone!',
+            modal_type: 'danger',
+            modal_icon: 'circle-x',
+            action_btn_type: 'btn-danger',
+            action_btn_text: 'Proceed',
+            action_btn_url: url_for(
+                'old-cars.delete-document',
+                {
+                    id: car.id,
+                    document: 'noc'
+                }
+            )
+        } %}
+        {% include 'components/modal.twig' with {
+            id: 'delete-form-35-modal-' ~ car.id,
+            title: 'Delete Form 35?',
+            description: 'This Action Cannot be Undone!',
+            modal_type: 'danger',
+            modal_icon: 'circle-x',
+            action_btn_type: 'btn-danger',
+            action_btn_text: 'Proceed',
+            action_btn_url: url_for(
+                'old-cars.delete-document',
+                {
+                    id: car.id,
+                    document: 'form_35'
+                }
+            )
+        } %}
+        {% include 'components/modal.twig' with {
+            id: 'delete-purchase-agreement-modal-' ~ car.id,
+            title: 'Delete Purchase Agreement?',
+            description: 'This Action Cannot be Undone!',
+            modal_type: 'danger',
+            modal_icon: 'circle-x',
+            action_btn_type: 'btn-danger',
+            action_btn_text: 'Proceed',
+            action_btn_url: url_for(
+                'old-cars.delete-document',
+                {
+                    id: car.id,
+                    document: 'purchase_agreement'
+                }
+            )
+        } %}
+        <div class="page-content">
+            <form
+                class="form-container"
+                action="{{
+                url_for(
+                    'old-cars.update',
+                    {
+                        id: car.id
+                    }
+                )
+                }}"
+                method="POST"
+                enctype="multipart/form-data"
+            >
+                <input type="hidden" name="_METHOD" value="PUT" />
+                <div class="form-legend">
+                    <h4>Basic Information</h4>
+                    <div class="form-group">
+                        <label for="docket_number">Docket Number*</label>
+                        <input
+                            type="text"
+                            name="docket_number"
+                            id="docket_number"
+                            placeholder="Enter Docket Number"
+                            value="{{ car.docket_number }}"
+                            readonly
+                            required
+                        />
+                    </div>
+                </div>
+                <div class="form-legend">
+                    <h4>Customer Details</h4>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="customer_name">Customer Name*</label>
+                            <input
+                                type="text"
+                                name="customer_name"
+                                id="customer_name"
+                                value="{{ car.customer_name }}"
+                                placeholder="Enter Customer Name"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="customer_phone">Customer Phone*</label>
+                            <input
+                                type="tel"
+                                name="customer_phone"
+                                id="customer_phone"
+                                value="{{ car.customer_phone }}"
+                                placeholder="Enter Customer Phone"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer_address1">Address Line 1*</label>
+                        <input
+                            type="text"
+                            name="customer_address1"
+                            id="customer_address1"
+                            value="{{ car.customer_address1 }}"
+                            placeholder="Enter Address Line 1"
+                            required
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="customer_address2">Address Line 2</label>
+                        <input
+                            type="text"
+                            name="customer_address2"
+                            id="customer_address2"
+                            value="{{ car.customer_address2 }}"
+                            placeholder="Enter Address Line 2"
+                        />
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="city_name">City*</label>
+                            <input
+                                type="text"
+                                name="city_name"
+                                id="city_name"
+                                class="autocomplete"
+                                data-autocomplete-url="{{
+                                url_for(
+                                    'cities.search'
+                                )
+                                }}"
+                                value="{{ car.city_name }}"
+                                placeholder="Enter City Name"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="pincode">Pincode*</label>
+                            <input
+                                type="text"
+                                name="pincode"
+                                id="pincode"
+                                placeholder="Enter Pincode"
+                                value="{{ car.pincode }}"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input
+                                type="email"
+                                name="email"
+                                id="email"
+                                placeholder="Enter Email"
+                                value="{{ car.email }}"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="customer_dob">Date of Birth*</label>
+                            <input
+                                type="date"
+                                name="customer_dob"
+                                id="customer_dob"
+                                value="{{ car.customer_dob }}"
+                                required
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-legend">
+                    <h4>Vehicle Information</h4>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="manufacturer_name">Manufacturer*</label>
+                            <input
+                                type="text"
+                                name="manufacturer_name"
+                                id="manufacturer_name"
+                                class="autocomplete"
+                                data-autocomplete-url="{{
+                                url_for(
+                                    'manufacturers.search'
+                                )
+                                }}"
+                                value="{{ car.manufacturer_name }}"
+                                placeholder="Enter Manufacturer Name"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="model_name">Model*</label>
+                            <input
+                                type="text"
+                                name="model_name"
+                                id="model_name"
+                                class="autocomplete"
+                                data-autocomplete-url="{{
+                                url_for(
+                                    'car-models.search'
+                                )
+                                }}"
+                                value="{{ car.model_name }}"
+                                placeholder="Enter Model Name"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="color">Color*</label>
+                            <input
+                                type="text"
+                                name="color"
+                                id="color"
+                                placeholder="Enter Color"
+                                value="{{ car.color }}"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="registration_no">
+                                Registration Number*
+                            </label>
+                            <input
+                                type="text"
+                                name="registration_no"
+                                id="registration_no"
+                                placeholder="Enter Registration Number"
+                                value="{{ car.registration_no }}"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="chassis_no">Chassis Number*</label>
+                            <input
+                                type="text"
+                                name="chassis_no"
+                                id="chassis_no"
+                                placeholder="Enter Chassis Number"
+                                value="{{ car.chassis_no }}"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="engine_no">Engine Number*</label>
+                            <input
+                                type="text"
+                                name="engine_no"
+                                id="engine_no"
+                                placeholder="Enter Engine Number"
+                                value="{{ car.engine_no }}"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="insurance_expiry_date">
+                                Insurance Expiry Date*
+                            </label>
+                            <input
+                                type="date"
+                                name="insurance_expiry_date"
+                                id="insurance_expiry_date"
+                                value="{{ car.insurance_expiry_date }}"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="hp_name">HP*</label>
+                        <input
+                            type="text"
+                            name="hp_name"
+                            id="hp_name"
+                            class="autocomplete"
+                            data-autocomplete-url="{{ url_for('hps.search') }}"
+                            placeholder="Enter HP Name"
+                            value="{{ car.hp_name }}"
+                            required
+                        />
+                    </div>
+                </div>
+
+                <div class="form-legend">
+                    <div class="form-legend-header">
+                        <h4>Extra Charges</h4>
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            id="addExtraPriceBtn"
+                        >
+                            <i data-lucide="plus"></i>
+                            Add Extra Charge
+                        </button>
+                    </div>
+                    <div class="form-group" id="extraPricesContainer">
+                        {% for charge in car.extra_charges %}
+                            <div class="form-group row extra-price-row">
+                                <input
+                                    type="text"
+                                    name="extra_charge_name[]"
+                                    placeholder="Enter Extra Charge Name"
+                                    value="{{ charge.description }}"
+                                    required
+                                />
+                                <input
+                                    type="number"
+                                    name="extra_charge_amount[]"
+                                    placeholder="Enter Extra Charge Amount"
+                                    value="{{ charge.amount }}"
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    class="icon-btn danger delete-extra-charge"
+                                >
+                                    <i data-lucide="trash-2"></i>
+                                </button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="form-legend">
+                    <h4>Price Breakdown</h4>
+                    <div class="form-group">
+                        <input
+                            type="number"
+                            name="current_price_breakdown"
+                            id="current_price_breakdown"
+                            placeholder="Current Price"
+                            value="{{ car.current_price }}"
+                            hidden
+                            readonly
+                        />
+                    </div>
+                    <div class="form-group" id="extra_charges_container"></div>
+                    <div class="form-group" id="final_price_container"></div>
+                </div>
+
+                <div class="form-legend">
+                    <h4>Additional Details</h4>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="dealer_name">Dealer*</label>
+                            <input
+                                type="text"
+                                name="dealer_name"
+                                id="dealer_name"
+                                class="autocomplete"
+                                data-autocomplete-url="{{
+                                url_for(
+                                    'dealers.search'
+                                )
+                                }}"
+                                value="{{ car.dealer_name }}"
+                                placeholder="Enter Dealer Name"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="location">Location*</label>
+                            <input
+                                type="text"
+                                name="location"
+                                id="location"
+                                placeholder="Enter Location"
+                                value="{{ car.location }}"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="executive_branch_name">
+                                Executive Branch*
+                            </label>
+                            <input
+                                type="text"
+                                name="executive_branch_name"
+                                id="executive_branch_name"
+                                class="autocomplete"
+                                data-autocomplete-url="{{
+                                url_for(
+                                    'executive-branchs.search'
+                                )
+                                }}"
+                                placeholder="Enter Executive Branch Name"
+                                value="{{ car.executive_branch_name }}"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="executive_name">Executive*</label>
+                            <input
+                                type="text"
+                                name="executive_name"
+                                id="executive_name"
+                                class="autocomplete"
+                                data-autocomplete-url="{{
+                                url_for(
+                                    'executives.search'
+                                )
+                                }}"
+                                placeholder="Enter Executive Name"
+                                value="{{ car.executive_name }}"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="insurance_company_name">
+                                Insurance Company*
+                            </label>
+                            <input
+                                type="text"
+                                name="insurance_company_name"
+                                id="insurance_company_name"
+                                class="autocomplete"
+                                data-autocomplete-url="{{
+                                url_for(
+                                    'insurance-companies.search'
+                                )
+                                }}"
+                                placeholder="Enter Insurance Company Name"
+                                value="{{ car.insurance_company_name }}"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="rto_name">RTO*</label>
+                            <input
+                                type="text"
+                                name="rto_name"
+                                id="rto_name"
+                                class="autocomplete"
+                                data-autocomplete-url="{{
+                                url_for(
+                                    'rtos.search'
+                                )
+                                }}"
+                                placeholder="Enter RTO Name"
+                                value="{{ car.rto_name }}"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="rto_code">RTO Code*</label>
+                        <input
+                            type="text"
+                            name="rto_code"
+                            id="rto_code"
+                            class="autocomplete"
+                            data-autocomplete-url="{{
+                            url_for(
+                                'rto-codes.search'
+                            )
+                            }}"
+                            value="{{ car.rto_code }}"
+                            placeholder="Enter RTO Code"
+                            required
+                        />
+                    </div>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="scheme">Scheme</label>
+                            <input
+                                type="text"
+                                name="scheme"
+                                id="scheme"
+                                placeholder="Enter Scheme"
+                                value="{{ car.scheme }}"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="broker_name">Broker Name</label>
+                            <input
+                                type="text"
+                                name="broker_name"
+                                id="broker_name"
+                                placeholder="Enter Broker Name"
+                                value="{{ car.broker_name }}"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="other_remarks">Other Remarks</label>
+                        <!-- prettier-ignore -->
+                        <textarea
+                            name="other_remarks"
+                            id="other_remarks"
+                            placeholder="Enter Other Remarks"
+                            rows="3">{{ car.other_remarks }}</textarea>
+                    </div>
+                </div>
+
+                <div class="form-legend">
+                    <h4>Documents</h4>
+                    <div class="form-group">
+                        <label for="rc_book">RC Book*</label>
+                        <input
+                            type="file"
+                            name="rc_book"
+                            id="rc_book"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                        />
+                    </div>
+                    {% if car.rc_book %}
+                        <div class="form-group row">
+                            <i data-lucide="file-text"></i>
+                            <a
+                                href="/uploads/documents/{{ car.rc_book }}"
+                                target="_blank"
+                            >
+                                RC Book
+                            </a>
+                            <button
+                                class="icon-btn danger"
+                                type="button"
+                                data-modal-open="delete-rc-book-modal-{{ car.id }}"
+                            >
+                                <i data-lucide="trash"></i>
+                            </button>
+                        </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label for="insurance_doc">Insurance</label>
+                        <input
+                            type="file"
+                            name="insurance_doc"
+                            id="insurance_doc"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                        />
+                    </div>
+                    {% if car.insurance_doc %}
+                        <div class="form-group row">
+                            <i data-lucide="shield-check"></i>
+                            <a
+                                href="/uploads/documents/{{ car.insurance_doc }}"
+                                target="_blank"
+                            >
+                                Insurance
+                            </a>
+                            <button
+                                class="icon-btn danger"
+                                type="button"
+                                data-modal-open="delete-insurance-doc-modal-{{ car.id }}"
+                            >
+                                <i data-lucide="trash"></i>
+                            </button>
+                        </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label for="owner_id_proof">Owner ID Proof*</label>
+                        <input
+                            type="file"
+                            name="owner_id_proof"
+                            id="owner_id_proof"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                        />
+                    </div>
+                    {% if car.owner_id_proof %}
+                        <div class="form-group row">
+                            <i data-lucide="id-card"></i>
+                            <a
+                                href="/uploads/documents/{{ car.owner_id_proof }}"
+                                target="_blank"
+                            >
+                                Owner ID Proof
+                            </a>
+                            <button
+                                class="icon-btn danger"
+                                type="button"
+                                data-modal-open="delete-owner-id-proof-modal-{{ car.id }}"
+                            >
+                                <i data-lucide="trash"></i>
+                            </button>
+                        </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label for="pan_card">PAN Card</label>
+                        <input
+                            type="file"
+                            name="pan_card"
+                            id="pan_card"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                        />
+                    </div>
+                    {% if car.pan_card %}
+                        <div class="form-group row">
+                            <i data-lucide="credit-card"></i>
+                            <a
+                                href="/uploads/documents/{{ car.pan_card }}"
+                                target="_blank"
+                            >
+                                PAN Card
+                            </a>
+                            <button
+                                class="icon-btn danger"
+                                type="button"
+                                data-modal-open="delete-pan-card-modal-{{ car.id }}"
+                            >
+                                <i data-lucide="trash"></i>
+                            </button>
+                        </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label for="aadhar_card">Aadhar Card</label>
+                        <input
+                            type="file"
+                            name="aadhar_card"
+                            id="aadhar_card"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                        />
+                    </div>
+                    {% if car.aadhar_card %}
+                        <div class="form-group row">
+                            <i data-lucide="contact"></i>
+                            <a
+                                href="/uploads/documents/{{ car.aadhar_card }}"
+                                target="_blank"
+                            >
+                                Aadhar Card
+                            </a>
+                            <button
+                                class="icon-btn danger"
+                                type="button"
+                                data-modal-open="delete-aadhar-card-modal-{{ car.id }}"
+                            >
+                                <i data-lucide="trash"></i>
+                            </button>
+                        </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label for="noc">NOC</label>
+                        <input
+                            type="file"
+                            name="noc"
+                            id="noc"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                        />
+                    </div>
+                    {% if car.noc %}
+                        <div class="form-group row">
+                            <i data-lucide="stamp"></i>
+                            <a
+                                href="/uploads/documents/{{ car.noc }}"
+                                target="_blank"
+                            >
+                                NOC
+                            </a>
+                            <button
+                                class="icon-btn danger"
+                                type="button"
+                                data-modal-open="delete-noc-modal-{{ car.id }}"
+                            >
+                                <i data-lucide="trash"></i>
+                            </button>
+                        </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label for="form_35">Form 35</label>
+                        <input
+                            type="file"
+                            name="form_35"
+                            id="form_35"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                        />
+                    </div>
+                    {% if car.form_35 %}
+                        <div class="form-group row">
+                            <i data-lucide="clipboard-list"></i>
+                            <a
+                                href="/uploads/documents/{{ car.form_35 }}"
+                                target="_blank"
+                            >
+                                Form 35
+                            </a>
+                            <button
+                                class="icon-btn danger"
+                                type="button"
+                                data-modal-open="delete-form-35-modal-{{ car.id }}"
+                            >
+                                <i data-lucide="trash"></i>
+                            </button>
+                        </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label for="purchase_agreement">
+                            Purchase Agreement
+                        </label>
+                        <input
+                            type="file"
+                            name="purchase_agreement"
+                            id="purchase_agreement"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                        />
+                    </div>
+                    {% if car.purchase_agreement %}
+                        <div class="form-group row">
+                            <i data-lucide="file-signature"></i>
+                            <a
+                                href="/uploads/documents/{{ car.purchase_agreement }}"
+                                target="_blank"
+                            >
+                                Purchase Agreement
+                            </a>
+                            <button
+                                class="icon-btn danger"
+                                type="button"
+                                data-modal-open="delete-purchase-agreement-modal-{{ car.id }}"
+                            >
+                                <i data-lucide="trash"></i>
+                            </button>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-legend">
+                    <h4>Car Images</h4>
+                    <div class="form-group">
+                        <label for="main_image">Main Image*</label>
+                        <input
+                            type="file"
+                            name="main_image"
+                            id="main_image"
+                            accept="image/*"
+                        />
+                        <div id="main-image-preview" class="main-image-preview">
+                            {% if car.main_image %}
+                                <div style="position: relative;">
+                                    <img
+                                        src="/uploads/old-cars/{{ car.main_image }}"
+                                        alt="{{ car.id }} Main Image"
+                                    />
+                                    <button
+                                        class="icon-btn danger"
+                                        style="position: absolute; top: 5px; right: 5px;"
+                                        type="button"
+                                        data-modal-open="delete-main-car-image-modal-{{ car.id }}"
+                                    >
+                                        <i data-lucide="x"></i>
+                                    </button>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="additional_images">Additional Images</label>
+                        <input
+                            type="file"
+                            name="additional_images[]"
+                            id="additional_images"
+                            accept="images/*"
+                            multiple="true"
+                        />
+                        <div class="additional-images-wrapper">
+                            <div
+                                class="additional-images-preview"
+                                id="additional-images-preview"
+                            >
+                                {% for image in car.additional_images %}
+                                    <div style="position: relative;">
+                                        <img
+                                            src="/uploads/old-cars/{{ image.image_url }}"
+                                            alt="{{ image.image_url }}"
+                                        />
+                                        <button
+                                            class="icon-btn danger"
+                                            type="button"
+                                            data-modal-open="delete-car-image-modal-{{ image.id }}"
+                                            style="position: absolute; top: 5px; right: 5px;"
+                                        >
+                                            <i data-lucide="x"></i>
+                                        </button>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-container-actions">
+                        <button class="btn btn-background-secondary">
+                            Cancel
+                        </button>
+                        <button class="btn btn-primary" id="create-vehicle">
+                            <i data-lucide="save"></i>
+                            Save Vehicle
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="/js/modal.js"></script>
+    <script src="/js/create-old-car.js"></script>
+    <script src="/js/edit-old-car.js"></script>
+    <script src="/js/edit-car.js"></script>
+{% endblock %}

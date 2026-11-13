@@ -1,0 +1,195 @@
+{% extends 'layouts/app.twig' %}
+
+{% block title %}
+    Edit Inquiry
+{% endblock %}
+
+{% block content %}
+    <div class="page">
+        {% include 'common/header.twig' with {
+            title: 'Edit Inquiry',
+            button: false,
+            back_button: true,
+            back_url: url_for('inquiries.index')
+        } %}
+        <div class="page-content">
+            <form
+                action="{{
+                url_for(
+                    'inquiries.update',
+                    {
+                        id: inquiry.id
+                    }
+                )
+                }}"
+                method="POST"
+                class="form-container"
+            >
+                <input type="hidden" name="_METHOD" value="PUT" />
+                <div class="form-legend">
+                    <h4>Customer Information</h4>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="customer_name">Customer Name*</label>
+                            <input
+                                type="text"
+                                name="customer_name"
+                                id="customer_name"
+                                value="{{ inquiry.customer_name }}"
+                                placeholder="Enter Customer Name"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="customer_email">
+                                Customer Email Address*
+                            </label>
+                            <input
+                                type="email"
+                                name="customer_email"
+                                id="customer_email"
+                                value="{{ inquiry.customer_email }}"
+                                placeholder="Enter Customer Email"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer_phone">Customer Phone*</label>
+                        <input
+                            type="text"
+                            name="customer_phone"
+                            id="customer_phone"
+                            value="{{ inquiry.customer_phone }}"
+                            placeholder="Enter Customer Phone"
+                            required
+                        />
+                    </div>
+                </div>
+                <div class="form-legend">
+                    <h4>Inquiry Details</h4>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="vehicle_of_interest">
+                                Vehicle of Interest*
+                            </label>
+                            <input
+                                type="text"
+                                name="vehicle_of_interest"
+                                id="vehicle_of_interest"
+                                value="{{ inquiry.vehicle_of_interest }}"
+                                placeholder="Enter Vehicle of Interest"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="preferred_contact_method">
+                                Preferred Contact Method*
+                            </label>
+                            <select
+                                name="preferred_contact_method"
+                                id="preferred_contact_method"
+                            >
+                                {% if
+                                    inquiry.preferred_contact_method
+                                        == 'email' %}
+                                    <option value="email" selected>
+                                        Email
+                                    </option>
+                                {% elseif
+                                    inquiry.preferred_contact_method
+                                        == 'phone' %}
+                                    <option value="phone" selected>
+                                        Phone
+                                    </option>
+                                {% else %}
+                                    <option value="" disabled selected>
+                                        Select Preferred Contact Method
+                                    </option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="additional_notes">Additional Notes</label>
+                        <!-- prettier-ignore -->
+                        <textarea
+                            name="additional_notes"
+                            id="additional_notes"
+                            placeholder="Enter Additional Notes"
+                        >{{ inquiry.additional_notes }}</textarea>
+                    </div>
+                </div>
+                <div class="form-legend">
+                    <h4>Additional Details</h4>
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="inquiry_source">Inquiry Source</label>
+                            <select name="inquiry_source" id="inquiry_source">
+                                <option value="" disabled selected>
+                                    Select Inquiry Source
+                                </option>
+                                {% for source in sources %}
+                                    {% if source == inquiry.inquiry_source %}
+                                        <option value="{{ source }}" selected>
+                                            {{ source|capitalize }}
+                                        </option>
+                                    {% else %}
+                                        <option value="{{ source }}">
+                                            {{ source|capitalize }}
+                                        </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {% if inquiry.inquiry_source == 'referral' %}
+                            <div
+                                class="form-group"
+                                id="referral_person_container"
+                            >
+                                <label for="referral_person">
+                                    Name of Refferal Person
+                                </label>
+                                <input
+                                    type="text"
+                                    name="referral_person"
+                                    id="referral_person"
+                                    value="{{ inquiry.referral_person }}"
+                                    placeholder="Enter Name of Refferal Person"
+                                />
+                            </div>
+                        {% else %}
+                            <div
+                                class="form-group d-none"
+                                id="referral_person_container"
+                            >
+                                <label for="referral_person">
+                                    Name of Refferal Person
+                                </label>
+                                <input
+                                    type="text"
+                                    name="referral_person"
+                                    id="referral_person"
+                                    placeholder="Enter Name of Refferal Person"
+                                />
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-container-actions">
+                    <a
+                        href="{{ url_for('inquiries.index') }}"
+                        class="btn btn-background-secondary"
+                    >
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i data-lucide="save"></i>
+                        Edit Inquiry
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="/js/create-inquiry.js"></script>
+{% endblock %}

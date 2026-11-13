@@ -1,0 +1,185 @@
+<aside id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-logo">
+            <i data-lucide="car-front"></i>
+            <h4>Parivar Motors</h4>
+        </div>
+        <ul class="sidebar-links top">
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="{{ current_route == 'dashboard' ? 'active' : '' }}"
+            >
+                <i data-lucide="layout-dashboard"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <div
+                class="dropdown {{ current_route matches '/^new-cars.*/' ? 'open' : '' }}"
+            >
+                <a
+                    class="dropdown-toggle {{ current_route matches '/^new-cars.*/' ? 'active' : '' }}"
+                >
+                    <i data-lucide="car"></i>
+                    <span>New Cars</span>
+                    <i data-lucide="chevron-down" class="dropdown-icon"></i>
+                </a>
+                <div class="dropdown-menu">
+                    <a
+                        href="{{ url_for('new-cars.index') }}"
+                        class="{{
+                        current_route == 'new-cars.index'
+                            ? 'active'
+                            : ''
+                        }}"
+                    >
+                        <i data-lucide="list"></i>
+                        <span>All New Cars</span>
+                    </a>
+                    <a
+                        href="{{ url_for('new-cars.create') }}"
+                        class="{{
+                        current_route == 'new-cars.create'
+                            ? 'active'
+                            : ''
+                        }}"
+                    >
+                        <i data-lucide="circle-plus"></i>
+                        <span>Add New Car</span>
+                    </a>
+                </div>
+            </div>
+
+            <div
+                class="dropdown {{ current_route matches '/^old-cars.*/' ? 'open' : '' }}"
+            >
+                <a
+                    class="dropdown-toggle {{ current_route matches '/^old-cars.*/' ? 'active' : '' }}"
+                >
+                    <i data-lucide="car-taxi-front"></i>
+                    <span>Old Cars</span>
+                    <i data-lucide="chevron-down" class="dropdown-icon"></i>
+                </a>
+                <div class="dropdown-menu">
+                    <a
+                        href="{{ url_for('old-cars.index') }}"
+                        class="{{
+                        current_route == 'old-cars.index'
+                            ? 'active'
+                            : ''
+                        }}"
+                    >
+                        <i data-lucide="list"></i>
+                        <span>All Old Cars</span>
+                    </a>
+                    <a
+                        href="{{ url_for('old-cars.create') }}"
+                        class="{{
+                        current_route == 'old-cars.create'
+                            ? 'active'
+                            : ''
+                        }}"
+                    >
+                        <i data-lucide="circle-plus"></i>
+                        <span>Add Old Car</span>
+                    </a>
+                </div>
+            </div>
+            <div
+                class="dropdown {{ current_route matches '/^inquiries.*/' ? 'open' : '' }}"
+            >
+                <a
+                    class="dropdown-toggle {{ current_route matches '/^inquiries.*/' ? 'active' : '' }}"
+                >
+                    <i data-lucide="notebook-pen"></i>
+                    <span>Inquiries</span>
+                    <i data-lucide="chevron-down" class="dropdown-icon"></i>
+                </a>
+                <div class="dropdown-menu">
+                    <a
+                        href="{{ url_for('inquiries.index') }}"
+                        class="{{
+                        current_route == 'inquiries.index'
+                            ? 'active'
+                            : ''
+                        }}"
+                    >
+                        <i data-lucide="notebook-tabs"></i>
+                        <span>All Inquiries</span>
+                    </a>
+                    <a
+                        href="{{ url_for('inquiries.create') }}"
+                        class="{{
+                        current_route == 'inquiries.create'
+                            ? 'active'
+                            : ''
+                        }}"
+                    >
+                        <i data-lucide="circle-plus"></i>
+                        <span>New Inquiry</span>
+                    </a>
+                </div>
+            </div>
+            <a
+                href="{{ url_for('sales.index') }}"
+                class="{{ current_route matches '/^sales.*/' ? 'active' : '' }}"
+            >
+                <i data-lucide="file-input"></i>
+                <span>Sales</span>
+            </a>
+            {% if session.user.role == 'admin' %}
+                <div
+                    class="dropdown {{ current_route matches '/^users.*/' ? 'open' : '' }}"
+                >
+                    <a
+                        class="dropdown-toggle {{ current_route matches '/^users.*/' ? 'active' : '' }}"
+                    >
+                        <i data-lucide="users"></i>
+                        <span>Users</span>
+                        <i data-lucide="chevron-down" class="dropdown-icon"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a
+                            href="{{ url_for('users.index') }}"
+                            class="{{
+                            current_route == 'users.index'
+                                ? 'active'
+                                : ''
+                            }}"
+                        >
+                            <i data-lucide="list"></i>
+                            <span>All Users</span>
+                        </a>
+                        <a
+                            href="{{ url_for('users.create') }}"
+                            class="{{
+                            current_route == 'users.create'
+                                ? 'active'
+                                : ''
+                            }}"
+                        >
+                            <i data-lucide="circle-plus"></i>
+                            <span>New User</span>
+                        </a>
+                    </div>
+                </div>
+                <a
+                    href="{{ url_for('settings') }}"
+                    class="{{
+                    current_route matches '/^settings.*/'
+                        ? 'active'
+                        : ''
+                    }}"
+                >
+                    <i data-lucide="settings"></i>
+                    <span>Settings</span>
+                </a>
+            {% endif %}
+        </ul>
+    </div>
+    <div class="sidebar-links">
+        <a href="{{ url_for('users.logout') }}" class="logout-link">
+            <i data-lucide="log-out"></i>
+            <span>Logout</span>
+        </a>
+    </div>
+</aside>
